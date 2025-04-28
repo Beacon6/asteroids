@@ -7,7 +7,7 @@ from player import Player
 
 
 def main() -> None:
-    print("Starting Asteroids!")
+    print(f"Starting {constants.TITLE}!")
     print(f"Screen width: {constants.SCREEN_WIDTH}")
     print(f"Screen height: {constants.SCREEN_HEIGHT}")
 
@@ -17,13 +17,14 @@ def main() -> None:
     screen: Surface = pygame.display.set_mode(
         (constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT), flags
     )
+    pygame.display.set_caption(f"{constants.TITLE}")
 
     clock: Clock = pygame.time.Clock()
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                print("Quitting Asteroids. Bye!")
+                print(f"Quitting {constants.TITLE}. Bye!")
                 return
             if event.type == pygame.WINDOWSIZECHANGED:
                 new_size: tuple[int, int] = screen.get_size()
