@@ -1,5 +1,4 @@
 from abc import abstractmethod
-
 import pygame
 
 
@@ -12,7 +11,7 @@ class CircleBase(pygame.sprite.Sprite):
         self.radius = radius
 
     @abstractmethod
-    def draw(self):
+    def draw(self, screen):
         pass
 
     @abstractmethod

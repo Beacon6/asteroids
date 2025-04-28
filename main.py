@@ -1,6 +1,7 @@
 import pygame
 
 import constants
+from player import Player
 
 
 def main():
@@ -26,6 +27,10 @@ def main():
                 print(f"New window height: {new_size[1]}")
 
         screen.fill("black")
+
+        player = Player(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2)
+        player.draw(screen)
+
         pygame.display.flip()
         clock.tick(constants.TARGET_FPS)
 
