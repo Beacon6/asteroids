@@ -9,8 +9,11 @@ def main():
     print(f"Screen height: {constants.SCREEN_HEIGHT}")
 
     pygame.init()
+
     flags = pygame.RESIZABLE
     screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT), flags)
+
+    clock = pygame.time.Clock()
 
     while True:
         for event in pygame.event.get():
@@ -24,6 +27,7 @@ def main():
 
         screen.fill("black")
         pygame.display.flip()
+        clock.tick(constants.TARGET_FPS)
 
 
 if __name__ == "__main__":
