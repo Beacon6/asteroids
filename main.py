@@ -8,6 +8,23 @@ def main():
     print(f"Screen width: {constants.SCREEN_WIDTH}")
     print(f"Screen height: {constants.SCREEN_HEIGHT}")
 
+    pygame.init()
+    flags = pygame.RESIZABLE
+    screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT), flags)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                print("Quitting Asteroids. Bye!")
+                return
+            if event.type == pygame.WINDOWSIZECHANGED:
+                new_size = screen.get_size()
+                print(f"New window width: {new_size[0]}")
+                print(f"New window height: {new_size[1]}")
+
+        screen.fill("black")
+        pygame.display.flip()
+
 
 if __name__ == "__main__":
     main()
