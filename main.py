@@ -6,6 +6,7 @@ from pygame.surface import Surface
 from pygame.time import Clock
 
 import constants
+from asteroid import Asteroid
 from player import Player
 
 
@@ -31,6 +32,13 @@ def main() -> None:
     player: Player = Player(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2)
     player.add(group_drawable, group_updatable)
 
+    asteroid: Asteroid = Asteroid(
+        constants.SCREEN_WIDTH // 2,
+        constants.SCREEN_HEIGHT // 2,
+        constants.ASTEROID_MAX_RADIUS,
+    )
+    asteroid.add(group_drawable, group_updatable)
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -45,6 +53,7 @@ def main() -> None:
 
         group_updatable.update(dt)
         player.draw(screen)
+        asteroid.draw(screen)
 
         pygame.display.flip()
         dt = float(clock.tick(constants.TARGET_FPS))  # time since last refresh

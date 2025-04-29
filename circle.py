@@ -10,7 +10,6 @@ class CircleBase(pygame.sprite.Sprite):
         super().__init__()
 
         self.position: Vector2 = pygame.math.Vector2(x, y)
-        self.velocity: Vector2 = pygame.math.Vector2(0, 0)
         self.radius: int = radius
 
     @abstractmethod
