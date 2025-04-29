@@ -20,6 +20,9 @@ def main() -> None:
     pygame.display.set_caption(f"{constants.TITLE}")
 
     clock: Clock = pygame.time.Clock()
+    dt: float = 0
+
+    player: Player = Player(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2)
 
     while True:
         for event in pygame.event.get():
@@ -33,11 +36,11 @@ def main() -> None:
 
         screen.fill("black")
 
-        player: Player = Player(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2)
+        player.update(dt)
         player.draw(screen)
 
         pygame.display.flip()
-        clock.tick(constants.TARGET_FPS)
+        dt = float(clock.tick(constants.TARGET_FPS))  # time since last refresh
 
 
 if __name__ == "__main__":

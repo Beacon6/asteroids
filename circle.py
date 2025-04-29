@@ -17,5 +17,5 @@ class CircleBase(pygame.sprite.Sprite):
         pass
 
     @abstractmethod
-    def update(self) -> None:
+    def update(self, dt: float) -> None:
         pass
