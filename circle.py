@@ -1,4 +1,5 @@
 from abc import abstractmethod
+
 import pygame
 from pygame.math import Vector2
 from pygame.surface import Surface

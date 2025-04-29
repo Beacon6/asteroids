@@ -1,4 +1,7 @@
+from typing import Any
+
 import pygame
+from pygame.sprite import Group
 from pygame.surface import Surface
 from pygame.time import Clock
 
@@ -22,7 +25,11 @@ def main() -> None:
     clock: Clock = pygame.time.Clock()
     dt: float = 0
 
+    group_drawable: Group[Any] = pygame.sprite.Group()  # noqa
+    group_updatable: Group[Any] = pygame.sprite.Group()  # noqa
+
     player: Player = Player(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2)
+    player.add(group_drawable, group_updatable)
 
     while True:
         for event in pygame.event.get():
@@ -36,7 +43,7 @@ def main() -> None:
 
         screen.fill("black")
 
-        player.update(dt)
+        group_updatable.update(dt)
         player.draw(screen)
 
         pygame.display.flip()

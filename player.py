@@ -1,10 +1,11 @@
+from typing import override
+
 import pygame
 from pygame.math import Vector2
 from pygame.surface import Surface
-from typing import override
 
-from circle import CircleBase
 import constants
+from circle import CircleBase
 
 
 class Player(CircleBase):
