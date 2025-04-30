@@ -28,6 +28,7 @@ def main() -> None:
 
     group_drawable: Group[Any] = pygame.sprite.Group()  # noqa
     group_updatable: Group[Any] = pygame.sprite.Group()  # noqa
+    group_asteroids: Group[Any] = pygame.sprite.Group()  # noqa
 
     player: Player = Player(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2)
     player.add(group_drawable, group_updatable)
@@ -37,7 +38,7 @@ def main() -> None:
         constants.SCREEN_HEIGHT // 2,
         constants.ASTEROID_MAX_RADIUS,
     )
-    asteroid.add(group_drawable, group_updatable)
+    asteroid.add(group_asteroids, group_drawable, group_updatable)
 
     while True:
         for event in pygame.event.get():

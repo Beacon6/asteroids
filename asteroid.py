@@ -4,6 +4,7 @@ import pygame
 from pygame.math import Vector2
 from pygame.surface import Surface
 
+import constants
 from circle import CircleBase
 
 
@@ -11,7 +12,7 @@ class Asteroid(CircleBase):
     def __init__(self, x: int, y: int, radius: int):
         super().__init__(x, y, radius)
 
-        self.velocity: Vector2 = pygame.math.Vector2(0, 0)
+        self.velocity: Vector2 = pygame.math.Vector2(0, 1)
 
     @override
     def draw(self, screen: Surface) -> None:
@@ -24,4 +25,7 @@ class Asteroid(CircleBase):
 
     @override
     def update(self, dt: float) -> None:
-        pass
+        self.move(dt)
+
+    def move(self, dt: float) -> None:
+        self.position += self.velocity * constants.ASTEROID_MOVE_SPEED * dt

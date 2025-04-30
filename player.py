@@ -54,8 +54,8 @@ class Player(CircleBase):
 
     def move(self, dt: float) -> None:
         forward: Vector2 = pygame.math.Vector2(0, 1).rotate(self.rotation)
-        self.position += forward * constants.PLAYER_SPEED * dt
+        self.position += forward * constants.PLAYER_MOVE_SPEED * dt
 
     def strafe(self, dt: float) -> None:
         direction: Vector2 = pygame.math.Vector2(0, 1).rotate(self.rotation + 90)
-        self.position += direction * constants.PLAYER_SPEED * dt
+        self.position += direction * constants.PLAYER_MOVE_SPEED * dt
