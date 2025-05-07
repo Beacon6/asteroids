@@ -9,7 +9,7 @@ from circle import CircleBase
 
 
 class Asteroid(CircleBase):
-    def __init__(self, x: int, y: int, radius: int):
+    def __init__(self, x: float, y: float, radius: int):
         super().__init__(x, y, radius)
 
         self.velocity: Vector2 = pygame.math.Vector2(0, 1)

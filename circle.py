@@ -6,7 +6,7 @@ from pygame.surface import Surface
 
 
 class CircleBase(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int, radius: int) -> None:
+    def __init__(self, x: float, y: float, radius: int) -> None:
         super().__init__()
 
         self.position: Vector2 = pygame.math.Vector2(x, y)

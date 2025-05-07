@@ -6,6 +6,7 @@ from pygame.surface import Surface
 from pygame.time import Clock
 
 import constants
+from asteroid_field import AsteroidField
 from player import Player
 
 
@@ -36,10 +37,11 @@ def main() -> None:
         screen.fill("black")
 
         group_updatable.update(dt)
-        player.draw(screen)
+        for obj in group_drawable:
+            obj.draw(screen)
 
         pygame.display.flip()
-        dt = float(clock.tick(constants.TARGET_FPS))  # time since last refresh
+        dt = float(clock.tick(constants.TARGET_FPS))  # time since last refresh (ms)
 
 
 def setup_objects() -> tuple[Any, ...]:
@@ -49,6 +51,11 @@ def setup_objects() -> tuple[Any, ...]:
 
     player: Player = Player(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2)
     player.add(group_drawable, group_updatable)
+
+    asteroid_field: AsteroidField = AsteroidField(
+        [group_drawable, group_updatable, group_asteroids]
+    )
+    asteroid_field.add(group_updatable)
 
     return player, group_drawable, group_updatable, group_asteroids
 
