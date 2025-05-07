@@ -10,28 +10,32 @@ from asteroid import Asteroid
 
 class AsteroidField(pygame.sprite.Sprite):
     spawn_points = [
+        # Left
         [
             pygame.math.Vector2(1, 0),
             lambda y: pygame.math.Vector2(
                 -constants.ASTEROID_MAX_RADIUS, y * constants.SCREEN_HEIGHT
             ),
         ],
+        # Right
         [
             pygame.math.Vector2(-1, 0),
             lambda y: pygame.math.Vector2(
                 constants.SCREEN_WIDTH + constants.ASTEROID_MAX_RADIUS, y * constants.SCREEN_HEIGHT
             ),
         ],
-        [
-            pygame.math.Vector2(0, 1),
-            lambda x: pygame.math.Vector2(
-                x * constants.SCREEN_HEIGHT, constants.SCREEN_HEIGHT + constants.ASTEROID_MAX_RADIUS
-            ),
-        ],
+        # Bottom - Y axis is inverted
         [
             pygame.math.Vector2(0, -1),
             lambda x: pygame.math.Vector2(
-                x * constants.SCREEN_HEIGHT, -constants.ASTEROID_MAX_RADIUS
+                x * constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT + constants.ASTEROID_MAX_RADIUS
+            ),
+        ],
+        # Top - Y axis is inverted
+        [
+            pygame.math.Vector2(0, 1),
+            lambda x: pygame.math.Vector2(
+                x * constants.SCREEN_WIDTH, -constants.ASTEROID_MAX_RADIUS
             ),
         ],
     ]
@@ -49,7 +53,6 @@ class AsteroidField(pygame.sprite.Sprite):
 
     def update(self, dt: float) -> None:
         self.spawn_timer += dt
-        print(self.spawn_timer)
         if self.spawn_timer > constants.ASTEROID_SPAWN_RATE:
             self.spawn_timer = 0.0
 
