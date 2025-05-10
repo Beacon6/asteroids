@@ -11,7 +11,7 @@ class CircleBase(pygame.sprite.Sprite):
 
         self.position: Vector2 = pygame.math.Vector2(x, y)
         self.radius: int = radius
-        self.rect = None
+        self.rect = pygame.Rect(self.position, (self.radius * 2, self.radius * 2))
 
     @abstractmethod
     def draw(self, screen: Surface) -> None:

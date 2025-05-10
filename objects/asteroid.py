@@ -4,8 +4,8 @@ import pygame
 from pygame.math import Vector2
 from pygame.surface import Surface
 
-import constants
-from circle import CircleBase
+from objects.circle import CircleBase
+from utils import constants
 
 
 class Asteroid(CircleBase):

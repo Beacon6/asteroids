@@ -5,9 +5,9 @@ from pygame.sprite import Group
 from pygame.surface import Surface
 from pygame.time import Clock
 
-import constants
-from asteroid_field import AsteroidField
-from player import Player
+from objects.asteroid_field import AsteroidField
+from objects.player import Player
+from utils import constants
 
 
 def main() -> None:
@@ -41,7 +41,9 @@ def main() -> None:
             obj.draw(screen)
 
         player_collision = pygame.sprite.spritecollideany(
-            player, group_asteroids, collided=pygame.sprite.collide_circle  # type: ignore
+            player,
+            group_asteroids,
+            pygame.sprite.collide_circle,  # type: ignore[unused-ignore]
         )
         if player_collision:
             print("Game over!")
