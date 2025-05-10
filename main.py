@@ -40,6 +40,13 @@ def main() -> None:
         for obj in group_drawable:
             obj.draw(screen)
 
+        player_collision = pygame.sprite.spritecollideany(
+            player, group_asteroids, collided=pygame.sprite.collide_circle  # type: ignore
+        )
+        if player_collision:
+            print("Game over!")
+            return
+
         pygame.display.flip()
         dt = float(clock.tick(constants.TARGET_FPS))  # time since last refresh (ms)
 

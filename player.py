@@ -20,7 +20,7 @@ class Player(CircleBase):
         points: list[Vector2] = self.triangle()
         width: int = 2
 
-        pygame.draw.polygon(screen, color, points, width)
+        self.rect = pygame.draw.polygon(screen, color, points, width)
 
     @override
     def update(self, dt: float) -> None:

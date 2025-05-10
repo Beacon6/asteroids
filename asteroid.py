@@ -21,7 +21,7 @@ class Asteroid(CircleBase):
         radius: int = self.radius
         width: int = 2
 
-        pygame.draw.circle(screen, color, center, radius, width)
+        self.rect = pygame.draw.circle(screen, color, center, radius, width)
 
     @override
     def update(self, dt: float) -> None:
