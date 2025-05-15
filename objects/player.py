@@ -1,18 +1,21 @@
-from typing import override
+from typing import Any, override
 
 import pygame
 from pygame.math import Vector2
 from pygame.surface import Surface
 
 from objects.circle import CircleBase
+from objects.missile import Missile
 from utils import constants
 
 
 class Player(CircleBase):
-    def __init__(self, x: int, y: int) -> None:
+    def __init__(self, x: int, y: int, collections: list[Any]) -> None:
         super().__init__(x, y, constants.PLAYER_RADIUS)
 
         self.rotation: float = 180
+        self.collections = collections
+        self.reload_timer: float = 0.0
 
     @override
     def draw(self, screen: Surface) -> None:
@@ -41,6 +44,14 @@ class Player(CircleBase):
         if key_inputs[pygame.K_q]:
             self.strafe(-dt)
 
+        if key_inputs[pygame.K_SPACE]:
+            if self.reload_timer <= 0.0:
+                self.shoot()
+                self.reload_timer = constants.PLAYER_RELOAD_SPEED
+
+        if self.reload_timer >= 0.0:
+            self.reload_timer -= dt
+
     def triangle(self) -> list[Vector2]:
         forward: Vector2 = pygame.math.Vector2(0, 1).rotate(self.rotation)
         right: Vector2 = pygame.math.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
@@ -59,3 +70,7 @@ class Player(CircleBase):
     def strafe(self, dt: float) -> None:
         direction: Vector2 = pygame.math.Vector2(0, 1).rotate(self.rotation + 90)
         self.position += direction * constants.PLAYER_MOVE_SPEED * dt
+
+    def shoot(self) -> None:
+        missile = Missile(self.position.x, self.position.y, constants.MISSILE_RADIUS, self.rotation)
+        missile.add(*self.collections)

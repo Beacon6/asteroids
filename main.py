@@ -58,7 +58,9 @@ def setup_objects() -> tuple[Any, ...]:
     group_updatable: Group[Any] = pygame.sprite.Group()
     group_asteroids: Group[Any] = pygame.sprite.Group()
 
-    player: Player = Player(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2)
+    player: Player = Player(
+        constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2, [group_drawable, group_updatable]
+    )
     player.add(group_drawable, group_updatable)
 
     asteroid_field: AsteroidField = AsteroidField(
