@@ -14,6 +14,7 @@ def main() -> None:
     print(f"Starting {constants.TITLE}!")
     print(f"Screen width: {constants.SCREEN_WIDTH}")
     print(f"Screen height: {constants.SCREEN_HEIGHT}")
+    print(f"Target FPS: {constants.TARGET_FPS}")
 
     pygame.init()
 

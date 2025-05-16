@@ -1,8 +1,14 @@
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 TITLE = "Asteroids"
 
-SCREEN_WIDTH = 1280
-SCREEN_HEIGHT = 720
-TARGET_FPS = 144
+SCREEN_WIDTH = int(os.getenv("SCREEN_WIDTH", 1280))
+SCREEN_HEIGHT = int(os.getenv("SCREEN_HEIGHT", 720))
+TARGET_FPS = int(os.getenv("TARGET_FPS", 60))
 
 PLAYER_RADIUS = 20
 PLAYER_ROTATION_SPEED = 0.2
