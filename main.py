@@ -27,7 +27,7 @@ def main() -> None:
     clock: Clock = pygame.time.Clock()
     dt: float = 0
 
-    player, group_drawable, group_updatable, group_asteroids = setup_objects()
+    player, group_drawable, group_updatable, group_asteroids, group_missiles = setup_objects()
 
     while True:
         for event in pygame.event.get():
@@ -44,11 +44,19 @@ def main() -> None:
         player_collision = pygame.sprite.spritecollideany(
             player,
             group_asteroids,
-            pygame.sprite.collide_circle,  # type: ignore[unused-ignore]
+            collided=pygame.sprite.collide_circle,  # type: ignore[unused-ignore]
         )
         if player_collision:
             print("Game over!")
             return
+
+        pygame.sprite.groupcollide(
+            group_missiles,
+            group_asteroids,
+            dokilla=True,
+            dokillb=True,
+            collided=pygame.sprite.collide_circle,  # type: ignore[unused-ignore]
+        )
 
         pygame.display.flip()
         dt = float(clock.tick(constants.TARGET_FPS))  # time since last refresh (ms)
@@ -58,9 +66,12 @@ def setup_objects() -> tuple[Any, ...]:
     group_drawable: Group[Any] = pygame.sprite.Group()
     group_updatable: Group[Any] = pygame.sprite.Group()
     group_asteroids: Group[Any] = pygame.sprite.Group()
+    group_missiles: Group[Any] = pygame.sprite.Group()
 
     player: Player = Player(
-        constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2, [group_drawable, group_updatable]
+        constants.SCREEN_WIDTH // 2,
+        constants.SCREEN_HEIGHT // 2,
+        collections=[group_drawable, group_updatable, group_missiles],
     )
     player.add(group_drawable, group_updatable)
 
@@ -69,7 +80,7 @@ def setup_objects() -> tuple[Any, ...]:
     )
     asteroid_field.add(group_updatable)
 
-    return player, group_drawable, group_updatable, group_asteroids
+    return player, group_drawable, group_updatable, group_asteroids, group_missiles
 
 
 if __name__ == "__main__":
