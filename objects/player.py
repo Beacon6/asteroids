@@ -27,6 +27,7 @@ class Player(CircleBase):
 
     @override
     def update(self, dt: float) -> None:
+        self.reload_timer -= dt
         key_inputs = pygame.key.get_pressed()
 
         if key_inputs[pygame.K_LEFT]:
@@ -44,13 +45,8 @@ class Player(CircleBase):
         if key_inputs[pygame.K_q]:
             self.strafe(-dt)
 
-        if key_inputs[pygame.K_SPACE]:
-            if self.reload_timer <= 0.0:
-                self.shoot()
-                self.reload_timer = constants.PLAYER_RELOAD_SPEED
-
-        if self.reload_timer >= 0.0:
-            self.reload_timer -= dt
+        if key_inputs[pygame.K_SPACE] and self.reload_timer <= 0:
+            self.shoot()
 
     def triangle(self) -> list[Vector2]:
         forward: Vector2 = pygame.math.Vector2(0, 1).rotate(self.rotation)
@@ -74,3 +70,4 @@ class Player(CircleBase):
     def shoot(self) -> None:
         missile = Missile(self.position.x, self.position.y, constants.MISSILE_RADIUS, self.rotation)
         missile.add(*self.collections)
+        self.reload_timer = constants.PLAYER_RELOAD_SPEED
