@@ -4,9 +4,9 @@ import pygame
 from pygame.math import Vector2
 from pygame.surface import Surface
 
-from objects.circle import CircleBase
-from objects.missile import Missile
-from utils import constants
+from app.objects.circle import CircleBase
+from app.objects.missile import Missile
+from app.settings import constants
 
 
 class Player(CircleBase):

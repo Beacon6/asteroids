@@ -4,8 +4,8 @@ from typing import Any
 import pygame
 from pygame.math import Vector2
 
-from objects.asteroid import Asteroid
-from utils import constants
+from app.objects.asteroid import Asteroid
+from app.settings import constants
 
 
 class AsteroidField(pygame.sprite.Sprite):
