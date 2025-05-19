@@ -58,13 +58,15 @@ class GameLoop:
                 print("Game over!")
                 return
 
-            pygame.sprite.groupcollide(
+            missile_collision = pygame.sprite.groupcollide(
                 group_missiles,
                 group_asteroids,
                 dokilla=True,
                 dokillb=True,
                 collided=pygame.sprite.collide_circle,  # type: ignore[unused-ignore]
             )
+            for obj in missile_collision.values():
+                obj[0].split()
 
             pygame.display.flip()
             dt = float(clock.tick(constants.TARGET_FPS))  # time since last refresh (ms)

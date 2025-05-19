@@ -30,7 +30,7 @@ Ctrl + C    Exit
 ## TODO
 
 - [x] Support game settings via `.env` (e.g. screen size)
-- [ ] Implement asteroid splitting when hit
+- [x] Implement asteroid splitting when hit
 - [ ] Add proper graphics
 - [ ] Add score tracking and display
 - [ ] Add player lives and a game over screen
