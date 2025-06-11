@@ -5,8 +5,7 @@ from pygame.sprite import Group
 from pygame.surface import Surface
 from pygame.time import Clock
 
-from app.objects.asteroid_field import AsteroidField
-from app.objects.player import Player
+from app.objects import AsteroidField, Player
 from app.settings import constants
 
 
