@@ -24,9 +24,8 @@ class GameLoop:
 
         pygame.init()
 
-        flags: int = pygame.RESIZABLE
         screen: Surface = pygame.display.set_mode(
-            (self.settings["screen_width"], self.settings["screen_height"]), flags
+            (self.settings["screen_width"], self.settings["screen_height"])
         )
         pygame.display.set_caption(constants.TITLE)
 
@@ -52,7 +51,7 @@ class GameLoop:
             player_collision = pygame.sprite.spritecollideany(
                 player,
                 group_asteroids,
-                collided=pygame.sprite.collide_circle,  # type: ignore[unused-ignore]
+                collided=pygame.sprite.collide_circle,
             )
             if player_collision:
                 print("Game over!")
@@ -63,7 +62,7 @@ class GameLoop:
                 group_asteroids,
                 dokilla=True,
                 dokillb=True,
-                collided=pygame.sprite.collide_circle,  # type: ignore[unused-ignore]
+                collided=pygame.sprite.collide_circle,
             )
             for obj in missile_collision.values():
                 obj[0].split()
@@ -71,7 +70,8 @@ class GameLoop:
             pygame.display.flip()
             dt = float(clock.tick(constants.TARGET_FPS))  # time since last refresh (ms)
 
-    def setup_objects(self) -> tuple[Any, ...]:
+    @staticmethod
+    def setup_objects() -> tuple[Any, ...]:
         group_drawable: Group[Any] = pygame.sprite.Group()
         group_updatable: Group[Any] = pygame.sprite.Group()
         group_asteroids: Group[Any] = pygame.sprite.Group()
