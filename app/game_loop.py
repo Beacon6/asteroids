@@ -19,7 +19,8 @@ class GameLoop:
 
     def start(self) -> None:
         print(f"Starting {constants.TITLE}!")
-        print(self.settings)
+        if constants.DEBUG:
+            print(self.settings)
 
         pygame.init()
 
