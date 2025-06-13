@@ -54,8 +54,14 @@ class GameLoop:
                 collided=pygame.sprite.collide_circle,
             )
             if player_collision:
-                print("Game over!")
-                return
+                player.hp -= 1
+                player_collision.kill()  # TODO: remove the colliding asteroid object; have to rename that
+                if constants.DEBUG:
+                    print(f"Player hit! HP left: {player.hp}")
+                # TODO: save high-score somewhere
+                if player.hp <= 0:
+                    print("Game over!")
+                    return
 
             missile_collision = pygame.sprite.groupcollide(
                 group_missiles,
@@ -64,8 +70,14 @@ class GameLoop:
                 dokillb=True,
                 collided=pygame.sprite.collide_circle,
             )
-            for obj in missile_collision.values():
-                obj[0].split()
+            if missile_collision:
+                for obj in missile_collision.values():
+                    obj[0].split()
+                    # TODO: check proper scoring
+                    added_score = int(obj[0].radius / constants.ASTEROID_MIN_RADIUS)
+                    player.score += added_score
+                    if constants.DEBUG:
+                        print(f"Player score: {player.score} (+{added_score})")
 
             pygame.display.flip()
             dt = float(clock.tick(constants.TARGET_FPS))  # time since last refresh (ms)

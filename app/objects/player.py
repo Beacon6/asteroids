@@ -17,6 +17,9 @@ class Player(CircleBase):
         self.collections = collections
         self.reload_timer: float = 0.0
 
+        self.hp: int = constants.PLAYER_HP
+        self.score: int = 0
+
     @override
     def draw(self, screen: Surface) -> None:
         color: str = "red"
