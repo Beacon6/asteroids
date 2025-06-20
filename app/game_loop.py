@@ -2,6 +2,7 @@ from typing import Any
 
 import pygame
 from pygame import freetype
+from pygame.freetype import Font
 from pygame.sprite import Group
 from pygame.surface import Surface
 from pygame.time import Clock
@@ -47,21 +48,7 @@ class GameLoop:
 
             screen.fill("black")
 
-            hp_text = f"Health: {player.hp}"
-            score_text = f"Score: {player.score}"
-            font.render_to(screen, (8, 8), hp_text, "darkgray", "black")
-            font.render_to(screen, (8, 32), score_text, "darkgray", "black")
-
-            if constants.DEBUG:
-                debug_text = f"FPS: {int(clock.get_fps())} | Asteroids: {len(group_asteroids)}"
-                debug_text_width = font.get_rect(debug_text).width
-                font.render_to(
-                    screen,
-                    (constants.SCREEN_WIDTH - debug_text_width - 8, 8),
-                    debug_text,
-                    "darkgray",
-                    "black",
-                )
+            self.render_text(font, screen, player, clock, group_asteroids)
 
             group_updatable.update(dt)
             for obj in group_drawable:
@@ -121,3 +108,23 @@ class GameLoop:
         asteroid_field.add(group_updatable)
 
         return player, group_drawable, group_updatable, group_asteroids, group_missiles
+
+    @staticmethod
+    def render_text(font: Font, dest: Surface, obj: Player, clock: Clock, grp: Any) -> None:
+        hp_text = f"Health: {obj.hp}"
+        score_text = f"Score: {obj.score}"
+        font.render_to(dest, (8, 8), hp_text, "darkgray", "black")
+        font.render_to(dest, (8, 32), score_text, "darkgray", "black")
+
+        if constants.DEBUG:
+            debug_text = f"FPS: {int(clock.get_fps())} | Asteroids: {len(grp)}"
+            debug_text_width = font.get_rect(debug_text).width
+            font.render_to(
+                dest,
+                (constants.SCREEN_WIDTH - debug_text_width - 8, 8),
+                debug_text,
+                "darkgray",
+                "black",
+            )
+
+        return
