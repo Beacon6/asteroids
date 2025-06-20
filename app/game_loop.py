@@ -1,6 +1,7 @@
 from typing import Any
 
 import pygame
+from pygame import freetype
 from pygame.sprite import Group
 from pygame.surface import Surface
 from pygame.time import Clock
@@ -23,6 +24,8 @@ class GameLoop:
             print(self.settings)
 
         pygame.init()
+        font = freetype.Font(None, 16)
+        font.antialiased = True
 
         screen: Surface = pygame.display.set_mode(
             (self.settings["screen_width"], self.settings["screen_height"])
@@ -43,6 +46,22 @@ class GameLoop:
                     return
 
             screen.fill("black")
+
+            hp_text = f"Health: {player.hp}"
+            score_text = f"Score: {player.score}"
+            font.render_to(screen, (8, 8), hp_text, "darkgray", "black")
+            font.render_to(screen, (8, 32), score_text, "darkgray", "black")
+
+            if constants.DEBUG:
+                debug_text = f"FPS: {int(clock.get_fps())} | Asteroids: {len(group_asteroids)}"
+                debug_text_width = font.get_rect(debug_text).width
+                font.render_to(
+                    screen,
+                    (constants.SCREEN_WIDTH - debug_text_width - 8, 8),
+                    debug_text,
+                    "darkgray",
+                    "black",
+                )
 
             group_updatable.update(dt)
             for obj in group_drawable:
