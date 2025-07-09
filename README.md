@@ -1,6 +1,6 @@
 # Asteroids
 
-Simple Asteroids game written in Python with Pygame.
+Asteroids game written with Pygame.
 
 ## Running the game
 
@@ -27,13 +27,23 @@ Space       Shoot
 Ctrl + C    Exit
 ```
 
+## Settings
+
+It is possible to change some rendering options via an `.env` file in the root directory.\
+Available options are:
+
+```
+SCREEN_WIDTH     Default: 1280
+SCREEN_HEIGHT    Default: 720
+TARGET_FPS       Default: 60
+```
+
 ## TODO
 
 - [x] Support game settings via `.env` (e.g. screen size)
 - [x] Implement asteroid splitting when hit
-- [ ] Add score tracking and display
-- [ ] Add player lives and a game over screen
-- [ ] Add proper graphics
-- [ ] Create a main menu and pause functionality
+- [x] Add score tracking and display
+- [x] Add player lives and a game over screen
+- [ ] Add movement velocity
+- [ ] Add weapons overheating
 - [ ] Add power-ups (e.g. shield, rapid fire)
-- [ ] Add sound effects for shooting and collisions
