@@ -28,17 +28,13 @@ class GameLoop:
         font = freetype.Font(None, 16)
         font.antialiased = True
 
-        screen: Surface = pygame.display.set_mode(
-            (self.settings["screen_width"], self.settings["screen_height"])
-        )
+        screen: Surface = pygame.display.set_mode((self.settings["screen_width"], self.settings["screen_height"]))
         pygame.display.set_caption(constants.TITLE)
 
         clock: Clock = pygame.time.Clock()
         dt: float = 0.0
 
-        player, group_drawable, group_updatable, group_asteroids, group_missiles = (
-            self.setup_objects()
-        )
+        player, group_drawable, group_updatable, group_asteroids, group_missiles = self.setup_objects()
 
         while True:
             for event in pygame.event.get():
@@ -102,9 +98,7 @@ class GameLoop:
         )
         player.add(group_drawable, group_updatable)
 
-        asteroid_field: AsteroidField = AsteroidField(
-            [group_drawable, group_updatable, group_asteroids]
-        )
+        asteroid_field: AsteroidField = AsteroidField([group_drawable, group_updatable, group_asteroids])
         asteroid_field.add(group_updatable)
 
         return player, group_drawable, group_updatable, group_asteroids, group_missiles

@@ -13,9 +13,7 @@ class AsteroidField(pygame.sprite.Sprite):
         # Left
         [
             pygame.math.Vector2(1, 0),
-            lambda y: pygame.math.Vector2(
-                -constants.ASTEROID_MAX_RADIUS, y * constants.SCREEN_HEIGHT
-            ),
+            lambda y: pygame.math.Vector2(-constants.ASTEROID_MAX_RADIUS, y * constants.SCREEN_HEIGHT),
         ],
         # Right
         [
@@ -34,9 +32,7 @@ class AsteroidField(pygame.sprite.Sprite):
         # Top - Y axis is inverted
         [
             pygame.math.Vector2(0, 1),
-            lambda x: pygame.math.Vector2(
-                x * constants.SCREEN_WIDTH, -constants.ASTEROID_MAX_RADIUS
-            ),
+            lambda x: pygame.math.Vector2(x * constants.SCREEN_WIDTH, -constants.ASTEROID_MAX_RADIUS),
         ],
     ]
 
