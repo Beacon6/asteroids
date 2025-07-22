@@ -6,5 +6,5 @@ def main() -> None:
     game_loop.start()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

@@ -6,15 +6,15 @@ from dotenv import load_dotenv
 load_dotenv()
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-d", "--debug", help="enable debug printing", action="store_true")
+parser.add_argument('-d', '--debug', help='enable debug printing', action='store_true')
 args = parser.parse_args()
 
-TITLE = "Asteroids"
+TITLE = 'Asteroids'
 DEBUG = args.debug
 
-SCREEN_WIDTH = int(os.getenv("SCREEN_WIDTH", 1280))
-SCREEN_HEIGHT = int(os.getenv("SCREEN_HEIGHT", 720))
-TARGET_FPS = int(os.getenv("TARGET_FPS", 60))
+SCREEN_WIDTH = int(os.getenv('SCREEN_WIDTH', 1280))
+SCREEN_HEIGHT = int(os.getenv('SCREEN_HEIGHT', 720))
+TARGET_FPS = int(os.getenv('TARGET_FPS', 60))
 
 PLAYER_RADIUS = 20
 PLAYER_ROTATION_SPEED = 0.2

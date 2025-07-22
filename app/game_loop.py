@@ -12,20 +12,20 @@ from app.settings import constants
 class GameLoop:
     def __init__(self) -> None:
         self.settings = {
-            "screen_width": constants.SCREEN_WIDTH,
-            "screen_height": constants.SCREEN_HEIGHT,
-            "target_fps": constants.TARGET_FPS,
+            'screen_width': constants.SCREEN_WIDTH,
+            'screen_height': constants.SCREEN_HEIGHT,
+            'target_fps': constants.TARGET_FPS,
         }
 
     def start(self) -> None:
-        print(f"Starting {constants.TITLE}!")
+        print(f'Starting {constants.TITLE}!')
         if constants.DEBUG:
             print(self.settings)
 
         pygame.init()
 
         # TODO: prevent player from going out of bounds
-        screen: Surface = pygame.display.set_mode((self.settings["screen_width"], self.settings["screen_height"]))
+        screen: Surface = pygame.display.set_mode((self.settings['screen_width'], self.settings['screen_height']))
         pygame.display.set_caption(constants.TITLE)
 
         clock: Clock = pygame.time.Clock()
@@ -36,10 +36,10 @@ class GameLoop:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == 99):
-                    print(f"Quitting {constants.TITLE}. Bye!")
+                    print(f'Quitting {constants.TITLE}. Bye!')
                     return
 
-            screen.fill("black")
+            screen.fill('black')
 
             render_panel(dest=screen, obj=player)
 
@@ -57,7 +57,7 @@ class GameLoop:
                 player_collision.kill()  # TODO: remove the colliding asteroid object; have to rename that
                 # TODO: save high-score somewhere
                 if player.hp <= 0:
-                    print("Game over!")
+                    print('Game over!')
                     return
 
             missile_collision = pygame.sprite.groupcollide(

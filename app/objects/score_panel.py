@@ -13,7 +13,7 @@ def _setup_font(size: int = 16) -> Font:
 
 def render_panel(dest: Surface, obj: Player) -> None:
     font = _setup_font()
-    hp_text = f"Health: {obj.hp}"
-    score_text = f"Score: {obj.score}"
-    font.render_to(dest, (8, 8), hp_text, "green", "black")
-    font.render_to(dest, (8, 32), score_text, "green", "black")
+    hp_text = f'Health: {obj.hp}'
+    score_text = f'Score: {obj.score}'
+    font.render_to(dest, (8, 8), hp_text, 'green', 'black')
+    font.render_to(dest, (8, 32), score_text, 'green', 'black')

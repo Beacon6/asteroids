@@ -16,7 +16,7 @@ class Missile(CircleBase):
 
     @override
     def draw(self, screen: Surface) -> None:
-        color: str = "green"
+        color: str = 'green'
         center: Vector2 = self.position
         radius: int = self.radius
         width: int = 2

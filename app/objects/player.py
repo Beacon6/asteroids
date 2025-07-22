@@ -22,7 +22,7 @@ class Player(CircleBase):
 
     @override
     def draw(self, screen: Surface) -> None:
-        color: str = "red"
+        color: str = 'red'
         points: list[Vector2] = self.triangle()
         width: int = 2
 
