@@ -1,3 +1,4 @@
+from logging import Logger
 from typing import Any
 
 import pygame
@@ -10,7 +11,8 @@ from app.settings import constants
 
 
 class GameLoop:
-    def __init__(self) -> None:
+    def __init__(self, logger: Logger) -> None:
+        self.logger = logger
         self.settings = {
             'screen_width': constants.SCREEN_WIDTH,
             'screen_height': constants.SCREEN_HEIGHT,
@@ -18,15 +20,14 @@ class GameLoop:
         }
 
     def start(self) -> None:
-        print(f'Starting {constants.TITLE}!')
-        if constants.DEBUG:
-            print(self.settings)
+        self.logger.info(80 * '=')
+        self.logger.info(f'Starting Asteroids! {self.settings}')
 
         pygame.init()
 
         # TODO: prevent player from going out of bounds
         screen: Surface = pygame.display.set_mode((self.settings['screen_width'], self.settings['screen_height']))
-        pygame.display.set_caption(constants.TITLE)
+        pygame.display.set_caption('Asteroids')
 
         clock: Clock = pygame.time.Clock()
         dt: float = 0.0
@@ -36,7 +37,7 @@ class GameLoop:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == 99):
-                    print(f'Quitting {constants.TITLE}. Bye!')
+                    self.logger.info('Quitting Asteroids!')
                     return
 
             screen.fill('black')
@@ -57,7 +58,7 @@ class GameLoop:
                 player_collision.kill()  # TODO: remove the colliding asteroid object; have to rename that
                 # TODO: save high-score somewhere
                 if player.hp <= 0:
-                    print('Game over!')
+                    self.logger.info(f'{player.hp=} Game over!')
                     return
 
             missile_collision = pygame.sprite.groupcollide(
