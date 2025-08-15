@@ -44,6 +44,8 @@ TARGET_FPS       Default: 60
 - [x] Implement asteroid splitting when hit
 - [x] Add score tracking and display
 - [x] Add player lives and a game over screen
+- [ ] Fix TODOs
+- [ ] Database
 - [ ] Add movement velocity
 - [ ] Add weapons overheating
 - [ ] Add power-ups (e.g. shield, rapid fire)

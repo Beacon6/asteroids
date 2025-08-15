@@ -1,72 +1,78 @@
-from logging import Logger
+import logging
 from typing import Any
 
-import pygame
+import pygame as pg
 from pygame.sprite import Group
 from pygame.surface import Surface
 from pygame.time import Clock
 
-from app.objects import AsteroidField, Player, render_panel
-from app.settings import constants
+from app.objects import AsteroidField, Player
+from app.ui import ScorePanel
+from app.utils import constants
+
+
+def get_logger() -> logging.Logger:
+    logger = logging.getLogger(__name__)
+    log_format = '%(asctime)s [%(levelname)s]: %(message)s'
+    logging.basicConfig(filename='asteroids.log', level=logging.INFO, format=log_format)
+    return logger
 
 
 class GameLoop:
-    def __init__(self, logger: Logger) -> None:
-        self.logger = logger
-        self.settings = {
-            'screen_width': constants.SCREEN_WIDTH,
-            'screen_height': constants.SCREEN_HEIGHT,
-            'target_fps': constants.TARGET_FPS,
-        }
+    logger = get_logger()
+    settings = {
+        'screen_width': constants.SCREEN_WIDTH,
+        'screen_height': constants.SCREEN_HEIGHT,
+        'target_fps': constants.TARGET_FPS,
+    }
+
+    def __init__(self) -> None:
+        pg.init()
+        pg.display.set_caption('Asteroids')
+
+        self.clock: Clock = pg.time.Clock()
+        self.dt: float = 0.0
+        self.screen: Surface = pg.display.set_mode((self.settings['screen_width'], self.settings['screen_height']))
+        self.score_panel = ScorePanel(render_target=self.screen)
 
     def start(self) -> None:
         self.logger.info(80 * '=')
         self.logger.info(f'Starting Asteroids! {self.settings}')
 
-        pygame.init()
-
         # TODO: prevent player from going out of bounds
-        screen: Surface = pygame.display.set_mode((self.settings['screen_width'], self.settings['screen_height']))
-        pygame.display.set_caption('Asteroids')
-
-        clock: Clock = pygame.time.Clock()
-        dt: float = 0.0
-
         player, group_drawable, group_updatable, group_asteroids, group_missiles = self.setup_objects()
 
         while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == 99):
+            for event in pg.event.get():
+                if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
                     self.logger.info('Quitting Asteroids!')
                     return
 
-            screen.fill('black')
+            self.screen.fill('black')
+            self.score_panel.render(data_source=player)
 
-            render_panel(dest=screen, obj=player)
-
-            group_updatable.update(dt)
+            group_updatable.update(self.dt)
             for obj in group_drawable:
-                obj.draw(screen)
+                obj.draw(self.screen)
 
-            player_collision = pygame.sprite.spritecollideany(
+            player_collision = pg.sprite.spritecollideany(
                 player,
                 group_asteroids,
-                collided=pygame.sprite.collide_circle,
+                collided=pg.sprite.collide_circle,
             )
             if player_collision:
                 player.hp -= 1
                 player_collision.kill()  # TODO: remove the colliding asteroid object; have to rename that
-                # TODO: save high-score somewhere
                 if player.hp <= 0:
                     self.logger.info(f'{player.hp=} Game over!')
-                    return
+                    pg.event.post(pg.event.Event(pg.QUIT))
 
-            missile_collision = pygame.sprite.groupcollide(
+            missile_collision = pg.sprite.groupcollide(
                 group_missiles,
                 group_asteroids,
                 dokilla=True,
                 dokillb=True,
-                collided=pygame.sprite.collide_circle,
+                collided=pg.sprite.collide_circle,
             )
             if missile_collision:
                 for obj in missile_collision.values():
@@ -75,15 +81,15 @@ class GameLoop:
                     added_score = int(obj[0].radius / constants.ASTEROID_MIN_RADIUS)
                     player.score += added_score
 
-            pygame.display.flip()
-            dt = float(clock.tick(constants.TARGET_FPS))  # time since last refresh (ms)
+            pg.display.flip()
+            self.dt = float(self.clock.tick(constants.TARGET_FPS))  # time since last refresh (ms)
 
     @staticmethod
     def setup_objects() -> tuple[Any, ...]:
-        group_drawable: Group[Any] = pygame.sprite.Group()
-        group_updatable: Group[Any] = pygame.sprite.Group()
-        group_asteroids: Group[Any] = pygame.sprite.Group()
-        group_missiles: Group[Any] = pygame.sprite.Group()
+        group_drawable: Group[Any] = pg.sprite.Group()
+        group_updatable: Group[Any] = pg.sprite.Group()
+        group_asteroids: Group[Any] = pg.sprite.Group()
+        group_missiles: Group[Any] = pg.sprite.Group()
 
         player: Player = Player(
             constants.SCREEN_WIDTH // 2,
@@ -92,6 +98,7 @@ class GameLoop:
         )
         player.add(group_drawable, group_updatable)
 
+        # TODO: Cleanup asteroids that are out of bounds
         asteroid_field: AsteroidField = AsteroidField([group_drawable, group_updatable, group_asteroids])
         asteroid_field.add(group_updatable)
 

@@ -1,38 +1,38 @@
 import random
 from typing import Any
 
-import pygame
+import pygame as pg
 from pygame.math import Vector2
 
 from app.objects.asteroid import Asteroid
-from app.settings import constants
+from app.utils import constants
 
 
-class AsteroidField(pygame.sprite.Sprite):
+class AsteroidField(pg.sprite.Sprite):
     spawn_points = [
         # Left
         [
-            pygame.math.Vector2(1, 0),
-            lambda y: pygame.math.Vector2(-constants.ASTEROID_MAX_RADIUS, y * constants.SCREEN_HEIGHT),
+            pg.math.Vector2(1, 0),
+            lambda y: pg.math.Vector2(-constants.ASTEROID_MAX_RADIUS, y * constants.SCREEN_HEIGHT),
         ],
         # Right
         [
-            pygame.math.Vector2(-1, 0),
-            lambda y: pygame.math.Vector2(
+            pg.math.Vector2(-1, 0),
+            lambda y: pg.math.Vector2(
                 constants.SCREEN_WIDTH + constants.ASTEROID_MAX_RADIUS, y * constants.SCREEN_HEIGHT
             ),
         ],
         # Bottom - Y axis is inverted
         [
-            pygame.math.Vector2(0, -1),
-            lambda x: pygame.math.Vector2(
+            pg.math.Vector2(0, -1),
+            lambda x: pg.math.Vector2(
                 x * constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT + constants.ASTEROID_MAX_RADIUS
             ),
         ],
         # Top - Y axis is inverted
         [
-            pygame.math.Vector2(0, 1),
-            lambda x: pygame.math.Vector2(x * constants.SCREEN_WIDTH, -constants.ASTEROID_MAX_RADIUS),
+            pg.math.Vector2(0, 1),
+            lambda x: pg.math.Vector2(x * constants.SCREEN_WIDTH, -constants.ASTEROID_MAX_RADIUS),
         ],
     ]
 
