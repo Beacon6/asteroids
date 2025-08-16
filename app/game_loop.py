@@ -1,4 +1,3 @@
-import logging
 from typing import Any
 
 import pygame as pg
@@ -6,16 +5,8 @@ from pygame.sprite import Group
 from pygame.surface import Surface
 from pygame.time import Clock
 
-from app.objects import AsteroidField, Player
-from app.ui import ScorePanel
-from app.utils import constants
-
-
-def get_logger() -> logging.Logger:
-    logger = logging.getLogger(__name__)
-    log_format = '%(asctime)s [%(levelname)s]: %(message)s'
-    logging.basicConfig(filename='asteroids.log', level=logging.INFO, format=log_format)
-    return logger
+from app.objects import AsteroidField, GameOverPanel, Player, ScorePanel
+from app.utils import constants, get_logger
 
 
 class GameLoop:
@@ -34,6 +25,7 @@ class GameLoop:
         self.dt: float = 0.0
         self.screen: Surface = pg.display.set_mode((self.settings['screen_width'], self.settings['screen_height']))
         self.score_panel = ScorePanel(render_target=self.screen)
+        self.game_over_panel = GameOverPanel(render_target=self.screen, font_size=64)
 
     def start(self) -> None:
         self.logger.info(80 * '=')
@@ -63,8 +55,10 @@ class GameLoop:
             if player_collision:
                 player.hp -= 1
                 player_collision.kill()  # TODO: remove the colliding asteroid object; have to rename that
+                self.logger.info(f'Damage taken! {player.hp=}')
                 if player.hp <= 0:
                     self.logger.info(f'{player.hp=} Game over!')
+                    self.game_over_panel.render()
                     pg.event.post(pg.event.Event(pg.QUIT))
 
             missile_collision = pg.sprite.groupcollide(
