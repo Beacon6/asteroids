@@ -71,9 +71,7 @@ class GameLoop:
             if missile_collision:
                 for obj in missile_collision.values():
                     obj[0].split()
-                    # TODO: check proper scoring
-                    added_score = int(obj[0].radius / constants.ASTEROID_MIN_RADIUS)
-                    player.score += added_score
+                    player.score += obj[0].type.score
 
             pg.display.flip()
             self.dt = float(self.clock.tick(constants.TARGET_FPS))  # time since last refresh (ms)

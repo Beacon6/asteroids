@@ -1,6 +1,6 @@
 # Asteroids
 
-Asteroids game written with Pygame.
+A simple Asteroids-style game written in Python. Built with Pygame.
 
 ## Running the game
 
@@ -44,7 +44,7 @@ TARGET_FPS       Default: 60
 - [x] Implement asteroid splitting when hit
 - [x] Add score tracking and display
 - [x] Add player lives and a game over screen
-- [ ] Fix TODOs
+- [x] Fix TODOs
 - [ ] Database
 - [ ] Add movement velocity
 - [ ] Add weapons overheating

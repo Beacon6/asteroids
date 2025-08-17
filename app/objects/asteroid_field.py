@@ -4,7 +4,7 @@ from typing import Any
 import pygame as pg
 from pygame.math import Vector2
 
-from app.objects.asteroid import Asteroid
+from app.objects import Asteroid, AsteroidType
 from app.utils import constants
 
 
@@ -13,26 +13,22 @@ class AsteroidField(pg.sprite.Sprite):
         # Left
         [
             pg.math.Vector2(1, 0),
-            lambda y: pg.math.Vector2(-constants.ASTEROID_MAX_RADIUS, y * constants.SCREEN_HEIGHT),
+            lambda y: pg.math.Vector2(-AsteroidType.LARGE.size, y * constants.SCREEN_HEIGHT),
         ],
         # Right
         [
             pg.math.Vector2(-1, 0),
-            lambda y: pg.math.Vector2(
-                constants.SCREEN_WIDTH + constants.ASTEROID_MAX_RADIUS, y * constants.SCREEN_HEIGHT
-            ),
+            lambda y: pg.math.Vector2(constants.SCREEN_WIDTH + AsteroidType.LARGE.size, y * constants.SCREEN_HEIGHT),
         ],
         # Bottom - Y axis is inverted
         [
             pg.math.Vector2(0, -1),
-            lambda x: pg.math.Vector2(
-                x * constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT + constants.ASTEROID_MAX_RADIUS
-            ),
+            lambda x: pg.math.Vector2(x * constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT + AsteroidType.LARGE.size),
         ],
         # Top - Y axis is inverted
         [
             pg.math.Vector2(0, 1),
-            lambda x: pg.math.Vector2(x * constants.SCREEN_WIDTH, -constants.ASTEROID_MAX_RADIUS),
+            lambda x: pg.math.Vector2(x * constants.SCREEN_WIDTH, -AsteroidType.LARGE.size),
         ],
     ]
 
@@ -42,8 +38,8 @@ class AsteroidField(pg.sprite.Sprite):
         self.collections = collections
         self.spawn_timer: float = 0.0
 
-    def spawn(self, position: Vector2, radius: int, velocity: Vector2) -> None:
-        asteroid = Asteroid(position.x, position.y, radius, self.collections)
+    def spawn(self, position: Vector2, asteroid_type: AsteroidType, velocity: Vector2) -> None:
+        asteroid = Asteroid(position, asteroid_type, self.collections)
         asteroid.velocity = velocity
         asteroid.add(*self.collections)
 
@@ -55,5 +51,5 @@ class AsteroidField(pg.sprite.Sprite):
             spawn_point: list[Any] = random.choice(self.spawn_points)
             velocity: Vector2 = spawn_point[0].rotate(random.randint(-30, 30))
             position: Vector2 = spawn_point[1](random.uniform(0, 1))
-            asteroid_kind = random.randint(1, constants.ASTEROID_KINDS)
-            self.spawn(position, asteroid_kind * constants.ASTEROID_MIN_RADIUS, velocity)
+            asteroid_type = random.choice(list(AsteroidType))
+            self.spawn(position, asteroid_type, velocity)
