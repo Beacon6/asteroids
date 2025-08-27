@@ -25,7 +25,7 @@ class AsteroidBase(ABC, Sprite):
     def __init__(self, spawn_position: Vector2, asteroid_type: AsteroidType) -> None:
         super().__init__()
         self.type: AsteroidType = asteroid_type
-        self.radius: int = asteroid_type.size  # NOTE: radius atribute is required by Pygame for collision detection
+        self.radius: int = asteroid_type.size  # radius atribute is required by Pygame for collision detection
         self.position: Vector2 = Vector2(spawn_position)
         self.velocity: Vector2 = Vector2(0, 1)
 
@@ -65,18 +65,14 @@ class Asteroid(AsteroidBase):
         assert isinstance(new_type, AsteroidType)
 
         random_offset = random.uniform(20, 50)
-        new_asteroid_a = Asteroid(
-            self.position,
-            new_type,
-            self.collections,
-        )
-        new_asteroid_a.velocity = self.velocity.rotate(random_offset)
-        new_asteroid_a.add(*self.collections)
+        self._spawn_new_on_split(new_type, random_offset)
+        self._spawn_new_on_split(new_type, -random_offset)
 
-        new_asteroid_b = Asteroid(
+    def _spawn_new_on_split(self, asteroid_type: AsteroidType, random_offset: float) -> None:
+        new_asteroid = Asteroid(
             self.position,
-            new_type,
+            asteroid_type,
             self.collections,
         )
-        new_asteroid_b.velocity = self.velocity.rotate(-random_offset)
-        new_asteroid_b.add(*self.collections)
+        new_asteroid.velocity = self.velocity.rotate(random_offset)
+        new_asteroid.add(*self.collections)

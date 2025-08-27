@@ -71,6 +71,6 @@ class Player(CircleBase):
         self.position += direction * constants.PLAYER_MOVE_SPEED * dt
 
     def shoot(self) -> None:
-        missile = Missile(self.position.x, self.position.y, constants.MISSILE_RADIUS, self.rotation)
+        missile = Missile(self.position, self.rotation)
         missile.add(*self.collections)
         self.reload_timer = constants.PLAYER_RELOAD_SPEED

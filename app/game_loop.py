@@ -10,7 +10,7 @@ from app.utils import constants, get_logger
 
 
 class GameLoop:
-    logger = get_logger()
+    logger = get_logger(__name__)
     settings = {
         'screen_width': constants.SCREEN_WIDTH,
         'screen_height': constants.SCREEN_HEIGHT,
