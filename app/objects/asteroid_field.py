@@ -1,15 +1,19 @@
 import random
-from typing import Any
+from typing import Any, Self
 
 import pygame as pg
 from pygame.math import Vector2
+from pygame.sprite import Sprite
 
 from app.objects import Asteroid, AsteroidType
+from app.objects.base import SpriteGroups
 from app.utils import constants
 
 
-class AsteroidField(pg.sprite.Sprite):
-    spawn_points = [
+class AsteroidField(Sprite):
+    _instance: Self | None = None
+    _initialized: bool = False
+    _spawn_points = [
         # Left
         [
             pg.math.Vector2(1, 0),
@@ -31,24 +35,31 @@ class AsteroidField(pg.sprite.Sprite):
             lambda x: pg.math.Vector2(x * constants.SCREEN_WIDTH, -AsteroidType.LARGE.size),
         ],
     ]
+    _spawn_timer: float = 0.0
+    _asteroid_groups: SpriteGroups | None = None
 
-    def __init__(self, collections: list[Any]) -> None:
-        super().__init__()
+    def __new__(cls, *args: Any, **kwargs: Any) -> Self:
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance  # type: ignore
 
-        self.collections = collections
-        self.spawn_timer: float = 0.0
+    def __init__(self, groups: SpriteGroups, asteroid_groups: SpriteGroups) -> None:
+        if not self._initialized:
+            super().__init__(*groups)
+            self._initialized = True
+            self._asteroid_groups = asteroid_groups
 
     def spawn(self, position: Vector2, asteroid_type: AsteroidType, velocity: Vector2) -> None:
-        asteroid = Asteroid(position, asteroid_type, self.collections)
+        assert self._asteroid_groups is not None
+        asteroid = Asteroid(position, asteroid_type, self._asteroid_groups)
         asteroid.velocity = velocity
-        asteroid.add(*self.collections)
 
     def update(self, dt: float) -> None:
-        self.spawn_timer += dt
-        if self.spawn_timer > constants.ASTEROID_SPAWN_RATE:
-            self.spawn_timer = 0.0
+        self._spawn_timer += dt
+        if self._spawn_timer > constants.ASTEROID_SPAWN_RATE:
+            self._spawn_timer = 0.0
 
-            spawn_point: list[Any] = random.choice(self.spawn_points)
+            spawn_point: list[Any] = random.choice(self._spawn_points)
             velocity: Vector2 = spawn_point[0].rotate(random.randint(-30, 30))
             position: Vector2 = spawn_point[1](random.uniform(0, 1))
             asteroid_type = random.choice(list(AsteroidType))

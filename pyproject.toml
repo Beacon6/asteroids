@@ -17,6 +17,7 @@ dev = [
 ]
 
 [tool.mypy]
+python_executable = "./.venv/bin/python"
 strict = true
 
 [tool.ruff]

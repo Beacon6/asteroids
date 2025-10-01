@@ -1,13 +1,13 @@
 import random
-from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Any, override
+from typing import override
 
 import pygame as pg
 from pygame.math import Vector2
 from pygame.rect import Rect
-from pygame.sprite import Sprite
 from pygame.surface import Surface
+
+from app.objects.base import ObjectBase, SpriteGroups
 
 
 class AsteroidType(Enum):
@@ -21,27 +21,12 @@ class AsteroidType(Enum):
         self.score: int = score
 
 
-class AsteroidBase(ABC, Sprite):
-    def __init__(self, spawn_position: Vector2, asteroid_type: AsteroidType) -> None:
-        super().__init__()
+class Asteroid(ObjectBase):
+    def __init__(self, spawn_position: Vector2, asteroid_type: AsteroidType, groups: SpriteGroups) -> None:
+        super().__init__(spawn_position, groups)
         self.type: AsteroidType = asteroid_type
-        self.radius: int = asteroid_type.size  # radius atribute is required by Pygame for collision detection
-        self.position: Vector2 = Vector2(spawn_position)
+        self.radius: int = self.type.size
         self.velocity: Vector2 = Vector2(0, 1)
-
-    @abstractmethod
-    def draw(self, screen: Surface) -> None:
-        pass
-
-    @abstractmethod
-    def update(self, dt: float) -> None:
-        pass
-
-
-class Asteroid(AsteroidBase):
-    def __init__(self, spawn_position: Vector2, asteroid_type: AsteroidType, collections: list[Any]) -> None:
-        super().__init__(spawn_position, asteroid_type)
-        self.collections = collections
 
     @override
     def draw(self, screen: Surface) -> None:
@@ -72,7 +57,6 @@ class Asteroid(AsteroidBase):
         new_asteroid = Asteroid(
             self.position,
             asteroid_type,
-            self.collections,
+            self._groups,
         )
         new_asteroid.velocity = self.velocity.rotate(random_offset)
-        new_asteroid.add(*self.collections)

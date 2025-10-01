@@ -1,31 +1,19 @@
-from abc import ABC, abstractmethod
 from typing import override
 
 import pygame as pg
 from pygame.math import Vector2
-from pygame.sprite import Sprite
 from pygame.surface import Surface
 
+from app.objects.base import ObjectBase, SpriteGroups
 from app.utils import constants
 
 
-class MissileBase(ABC, Sprite):
-    def __init__(self, spawn_position: Vector2, rotation: float) -> None:
-        super().__init__()
+class Missile(ObjectBase):
+    def __init__(self, spawn_position: Vector2, rotation: float, groups: SpriteGroups) -> None:
+        super().__init__(spawn_position, groups)
         self.radius: int = constants.MISSILE_RADIUS
-        self.position: Vector2 = Vector2(spawn_position)
         self.velocity: Vector2 = Vector2(0, 1).rotate(rotation)
 
-    @abstractmethod
-    def draw(self, screen: Surface) -> None:
-        pass
-
-    @abstractmethod
-    def update(self, dt: float) -> None:
-        pass
-
-
-class Missile(MissileBase):
     @override
     def draw(self, screen: Surface) -> None:
         color: str = 'green'

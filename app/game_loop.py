@@ -1,11 +1,13 @@
 from typing import Any
 
 import pygame as pg
+from pygame.math import Vector2
 from pygame.sprite import Group
 from pygame.surface import Surface
 from pygame.time import Clock
 
-from app.objects import AsteroidField, GameOverPanel, Player, ScorePanel
+from app.objects import AsteroidField, Player
+from app.ui import GameOverPanel, ScorePanel
 from app.utils import constants, get_logger
 
 
@@ -83,15 +85,12 @@ class GameLoop:
         group_asteroids: Group[Any] = pg.sprite.Group()
         group_missiles: Group[Any] = pg.sprite.Group()
 
-        player: Player = Player(
-            constants.SCREEN_WIDTH // 2,
-            constants.SCREEN_HEIGHT // 2,
-            collections=[group_drawable, group_updatable, group_missiles],
-        )
+        player_spawn_position: Vector2 = Vector2(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2)
+        player: Player = Player(player_spawn_position, groups=[group_drawable, group_updatable, group_missiles])
         player.add(group_drawable, group_updatable)
 
         # TODO: Cleanup asteroids that are out of bounds
-        asteroid_field: AsteroidField = AsteroidField([group_drawable, group_updatable, group_asteroids])
-        asteroid_field.add(group_updatable)
+        asteroid_groups = [group_drawable, group_updatable, group_asteroids]
+        AsteroidField([group_updatable], asteroid_groups)
 
         return player, group_drawable, group_updatable, group_asteroids, group_missiles
