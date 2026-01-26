@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 class GameLoop:
     _settings = get_settings()
 
-    def __init__(self) -> None:
+    def __init__(self, debug: bool = False) -> None:
         self.game_scene = GameScene()
         logger.debug('Scene initialised')
 
@@ -21,6 +21,7 @@ class GameLoop:
         self.dt = 0.0  # delta time
 
         self.running = True
+        self.debug = debug
 
     def start(self) -> None:
         logger.debug('Starting game loop')
@@ -38,7 +39,8 @@ class GameLoop:
             self.game_scene.updatable.update(self.dt)
             for obj in self.game_scene.drawable:
                 obj.draw()
-                pg.draw.rect(self.game_scene.screen, (255, 0, 0), obj.rect, 1)
+                if self.debug:
+                    pg.draw.rect(self.game_scene.screen, (255, 0, 0), obj.rect, 1)
 
             player_collisions = groupcollide(
                 self.game_scene.player,
@@ -62,6 +64,8 @@ class GameLoop:
             if missile_collisions:
                 logger.debug(missile_collisions)
                 logger.info('Asteroid destroyed!')
+                for _, val in missile_collisions.items():
+                    val[0].split()
 
             pg.display.flip()
             self.dt = self.clock.tick(self._settings.target_fps)  # time since last refresh (ms)

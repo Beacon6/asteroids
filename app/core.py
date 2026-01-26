@@ -14,7 +14,7 @@ TITLE = 'Asteroids'
 class GameCore:
     _settings = get_settings()
 
-    def __init__(self) -> None:
+    def __init__(self, debug: bool = False) -> None:
         pg.init()
         logger.debug('Pygame intialised')
         set_caption(TITLE)
@@ -22,4 +22,4 @@ class GameCore:
         logger.debug('Settings loaded')
         logger.debug(self._settings.model_dump())
 
-        GameLoop().start()
+        GameLoop(debug).start()

@@ -1,4 +1,5 @@
 import logging
+import random
 from enum import Enum
 
 import pygame as pg
@@ -52,25 +53,20 @@ class Asteroid(Sprite):
     def update(self, dt: float) -> None:
         self.position += self.velocity * self.type.speed * dt
 
-    # def split(self) -> None:
-    #     if self.type == AsteroidType.SMALL:
-    #         return
-    #
-    #     match self.type:
-    #         case AsteroidType.LARGE:
-    #             new_type = AsteroidType.MEDIUM
-    #         case AsteroidType.MEDIUM:
-    #             new_type = AsteroidType.SMALL
-    #     assert isinstance(new_type, AsteroidType)
-    #
-    #     random_offset = random.uniform(20, 50)
-    #     self._spawn_new_on_split(new_type, random_offset)
-    #     self._spawn_new_on_split(new_type, -random_offset)
-    #
-    # def _spawn_new_on_split(self, asteroid_type: AsteroidType, random_offset: float) -> None:
-    #     new_asteroid = Asteroid(
-    #         self.position,
-    #         asteroid_type,
-    #         self._groups,
-    #     )
-    #     new_asteroid.velocity = self.velocity.rotate(random_offset)
+    def split(self) -> None:
+        if self.type == AsteroidType.SMALL:
+            return
+
+        match self.type:
+            case AsteroidType.LARGE:
+                new_type = AsteroidType.MEDIUM
+            case AsteroidType.MEDIUM:
+                new_type = AsteroidType.SMALL
+
+        random_offset = random.uniform(20, 50)
+        self.spawn_new_on_split(new_type, random_offset)
+        self.spawn_new_on_split(new_type, -random_offset)
+
+    def spawn_new_on_split(self, asteroid_type: AsteroidType, random_offset: float) -> None:
+        new_asteroid = Asteroid(self.scene, self.position, asteroid_type)
+        new_asteroid.velocity = self.velocity.rotate(random_offset)
