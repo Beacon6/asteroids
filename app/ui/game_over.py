@@ -3,22 +3,20 @@ from typing import Any, override
 
 import pygame as pg
 
-from app.objects.base import ObjectBase
 from app.ui.base import PanelBase
-from app.utils import constants
 
 
 class GameOverPanel(PanelBase):
     @override
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self.h_offset = constants.SCREEN_WIDTH // 2
-        self.v_offset = constants.SCREEN_HEIGHT // 2
+        self.h_offset = 100
+        self.v_offset = 100
         self.fg_color = 'purple'
         self.bg_color = 'black'
 
     @override
-    def render(self, data_source: ObjectBase | None = None) -> None:
+    def render(self, data_source: Any | None = None) -> None:
         text = 'Game over!'
         text_size = self.font.get_rect(text).size
         self.font.render_to(

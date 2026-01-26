@@ -1,50 +1,53 @@
-from typing import Any, Self, override
+import logging
 
 import pygame as pg
 from pygame.math import Vector2
-from pygame.surface import Surface
+from pygame.sprite import Sprite
 
-from app.objects import Missile
-from app.objects.base import ObjectBase, SpriteGroups
-from app.utils import constants
+from app.objects.missile import Missile
+from app.objects.scenes import GameScene
+from app.settings import get_player_initial_position, get_settings
+
+logger = logging.getLogger(__name__)
 
 
-class Player(ObjectBase):
-    _instance: Self | None = None
-    _initialized: bool = False
+class Player(Sprite):
+    _settings = get_settings()
 
-    def __new__(cls, *args: Any, **kwargs: Any) -> Self:
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance  # type: ignore
+    def __init__(self, scene: GameScene) -> None:
+        super().__init__()
 
-    def __init__(self, spawn_position: Vector2, groups: SpriteGroups) -> None:
-        if not self._initialized:
-            super().__init__(spawn_position, groups)
-            self.radius: int = constants.PLAYER_RADIUS
-            self.rotation: float = 180.0
-            self.velocity: Vector2 = Vector2(0, 1)
-            self.hp: int = constants.PLAYER_HP
-            self.score: int = 0
-            self.reload_timer: float = 0.0
-            self._initialized = True
+        self.scene = scene
 
-    def _build_triangle(self) -> list[Vector2]:
+        self.position = get_player_initial_position()
+        self.rotation = self._settings.player_initial_rotation
+        logger.debug(f'Player spawn position: {self.position}/{self.rotation}')
+
+        self.scene.drawable.add(self)
+        self.scene.updatable.add(self)
+        self.scene.player.add(self)
+
+        self.hp = self._settings.player_hp
+        self.score = 0
+        self.reload_timer = 0.0
+        logger.debug('Player initialised')
+
+    def _build_triangle(self) -> tuple[Vector2, Vector2, Vector2]:
         forward: Vector2 = Vector2(0, 1).rotate(self.rotation)
-        right: Vector2 = Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
-        a: Vector2 = self.position + forward * self.radius
-        b: Vector2 = self.position - forward * self.radius - right
-        c: Vector2 = self.position - forward * self.radius + right
-        return [a, b, c]
+        right: Vector2 = Vector2(0, 1).rotate(self.rotation + 90) * self._settings.player_radius / 1.5
+        a: Vector2 = self.position + forward * self._settings.player_radius
+        b: Vector2 = self.position - forward * self._settings.player_radius - right
+        c: Vector2 = self.position - forward * self._settings.player_radius + right
+        return (a, b, c)
 
-    @override
-    def draw(self, screen: Surface) -> None:
-        color: str = 'red'
-        width: int = 2
-        points: list[Vector2] = self._build_triangle()
-        self.rect = pg.draw.polygon(screen, color, points, width)
+    def draw(self) -> None:
+        self.rect = pg.draw.polygon(
+            self.scene.screen,
+            self._settings.player_color,
+            self._build_triangle(),
+            self._settings.player_line_width,
+        )
 
-    @override
     def update(self, dt: float) -> None:
         self.reload_timer -= dt
         key_inputs = pg.key.get_pressed()
@@ -68,16 +71,16 @@ class Player(ObjectBase):
             self.shoot()
 
     def rotate(self, dt: float) -> None:
-        self.rotation += constants.PLAYER_ROTATION_SPEED * dt
+        self.rotation += self._settings.player_rotation_speed * dt
 
     def move(self, dt: float) -> None:
         forward: Vector2 = pg.math.Vector2(0, 1).rotate(self.rotation)
-        self.position += forward * constants.PLAYER_MOVE_SPEED * dt
+        self.position += forward * self._settings.player_move_speed * dt
 
     def strafe(self, dt: float) -> None:
         direction: Vector2 = pg.math.Vector2(0, 1).rotate(self.rotation + 90)
-        self.position += direction * constants.PLAYER_MOVE_SPEED * dt
+        self.position += direction * self._settings.player_move_speed * dt
 
     def shoot(self) -> None:
-        Missile(self.position, self.rotation, self.groups())
-        self.reload_timer = constants.PLAYER_RELOAD_SPEED
+        Missile(self.scene, self.position, self.rotation)
+        self.reload_timer = self._settings.player_reload_speed

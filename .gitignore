@@ -9,12 +9,5 @@ wheels/
 # Virtual environments
 .venv
 
-# IDE specific
-.idea
-.vscode
-
 # Local config
 .env
-
-# Logs
-*.log

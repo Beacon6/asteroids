@@ -29,13 +29,11 @@ Ctrl + C    Exit
 
 ## Settings
 
-It is possible to change some rendering options via an `.env` file in the root directory.\
-Available options are:
-
-```
-SCREEN_WIDTH     Default: 1280
-SCREEN_HEIGHT    Default: 720
-TARGET_FPS       Default: 60
+Display settings can be changed through an `.env` which will be loaded automatically:
+```bash
+SCREEN_WIDTH=1920
+SCREEN_HEIGHT=1080
+TARGET_FPS=60
 ```
 
 ## TODO
@@ -45,7 +43,6 @@ TARGET_FPS       Default: 60
 - [x] Add score tracking and display
 - [x] Add player lives and a game over screen
 - [x] Fix TODOs
-- [ ] Database
 - [ ] Add movement velocity
 - [ ] Add weapons overheating
 - [ ] Add power-ups (e.g. shield, rapid fire)

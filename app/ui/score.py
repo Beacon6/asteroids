@@ -1,7 +1,6 @@
 from typing import Any, override
 
 from app.objects import Player
-from app.objects.base import ObjectBase
 from app.ui.base import PanelBase
 
 
@@ -15,7 +14,7 @@ class ScorePanel(PanelBase):
         self.bg_color = 'black'
 
     @override
-    def render(self, data_source: ObjectBase | None = None) -> None:
+    def render(self, data_source: Any | None = None) -> None:
         assert data_source is not None and isinstance(data_source, Player)
         assert data_source.hp in range(1, 4)
         match data_source.hp:

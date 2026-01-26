@@ -1,25 +1,41 @@
-from typing import override
+import logging
 
 import pygame as pg
 from pygame.math import Vector2
-from pygame.surface import Surface
+from pygame.sprite import Sprite
 
-from app.objects.base import ObjectBase, SpriteGroups
-from app.utils import constants
+from app.objects.scenes import GameScene
+from app.settings import get_settings
+
+logger = logging.getLogger(__name__)
 
 
-class Missile(ObjectBase):
-    def __init__(self, spawn_position: Vector2, rotation: float, groups: SpriteGroups) -> None:
-        super().__init__(spawn_position, groups)
-        self.radius: int = constants.MISSILE_RADIUS
-        self.velocity: Vector2 = Vector2(0, 1).rotate(rotation)
+class Missile(Sprite):
+    _settings = get_settings()
 
-    @override
-    def draw(self, screen: Surface) -> None:
-        color: str = 'green'
-        width: int = 2
-        self.rect = pg.draw.circle(screen, color, self.position, self.radius, width)
+    def __init__(self, scene: GameScene, position: Vector2, rotation: float) -> None:
+        super().__init__()
 
-    @override
+        self.scene = scene
+
+        self.position = Vector2(position)
+        self.rotation = rotation
+
+        self.scene.drawable.add(self)
+        self.scene.updatable.add(self)
+        self.scene.projectiles.add(self)
+
+        self.velocity = Vector2(0, 1).rotate(rotation)
+        logger.debug(f'Missile initialised at {self.position}')
+
+    def draw(self) -> None:
+        self.rect = pg.draw.circle(
+            self.scene.screen,
+            self._settings.missile_color,
+            self.position,
+            self._settings.missile_radius,
+            self._settings.missile_line_width,
+        )
+
     def update(self, dt: float) -> None:
-        self.position += self.velocity * constants.MISSILE_SPEED * dt
+        self.position += self.velocity * self._settings.missile_speed * dt

@@ -1,66 +1,68 @@
+import logging
 import random
-from typing import Any, Self
+from collections.abc import Callable
 
 import pygame as pg
 from pygame.math import Vector2
 from pygame.sprite import Sprite
 
-from app.objects import Asteroid, AsteroidType
-from app.objects.base import SpriteGroups
-from app.utils import constants
+from app.objects.asteroid import Asteroid, AsteroidType
+from app.objects.scenes import GameScene
+from app.settings import get_settings
+
+logger = logging.getLogger(__name__)
+
+SpawnPoints = list[tuple[Vector2, Callable[[float], Vector2]]]
 
 
 class AsteroidField(Sprite):
-    _instance: Self | None = None
-    _initialized: bool = False
-    _spawn_points = [
-        # Left
-        [
-            pg.math.Vector2(1, 0),
-            lambda y: pg.math.Vector2(-AsteroidType.LARGE.size, y * constants.SCREEN_HEIGHT),
-        ],
-        # Right
-        [
-            pg.math.Vector2(-1, 0),
-            lambda y: pg.math.Vector2(constants.SCREEN_WIDTH + AsteroidType.LARGE.size, y * constants.SCREEN_HEIGHT),
-        ],
-        # Bottom - Y axis is inverted
-        [
-            pg.math.Vector2(0, -1),
-            lambda x: pg.math.Vector2(x * constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT + AsteroidType.LARGE.size),
-        ],
-        # Top - Y axis is inverted
-        [
-            pg.math.Vector2(0, 1),
-            lambda x: pg.math.Vector2(x * constants.SCREEN_WIDTH, -AsteroidType.LARGE.size),
-        ],
-    ]
-    _spawn_timer: float = 0.0
-    _asteroid_groups: SpriteGroups | None = None
+    _settings = get_settings()
 
-    def __new__(cls, *args: Any, **kwargs: Any) -> Self:
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance  # type: ignore
+    def __init__(self, scene: GameScene) -> None:
+        super().__init__()
 
-    def __init__(self, groups: SpriteGroups, asteroid_groups: SpriteGroups) -> None:
-        if not self._initialized:
-            super().__init__(*groups)
-            self._initialized = True
-            self._asteroid_groups = asteroid_groups
+        self.scene = scene
 
-    def spawn(self, position: Vector2, asteroid_type: AsteroidType, velocity: Vector2) -> None:
-        assert self._asteroid_groups is not None
-        asteroid = Asteroid(position, asteroid_type, self._asteroid_groups)
-        asteroid.velocity = velocity
+        screen_width = self._settings.screen_width
+        screen_height = self._settings.screen_height
+        self.spawn_points: SpawnPoints = [
+            # Left
+            (
+                pg.math.Vector2(1, 0),
+                lambda y: pg.math.Vector2(-AsteroidType.LARGE.size, y * screen_height),
+            ),
+            # Right
+            (
+                pg.math.Vector2(-1, 0),
+                lambda y: pg.math.Vector2(screen_width + AsteroidType.LARGE.size, y * screen_height),
+            ),
+            # Bottom - Y axis is inverted
+            (
+                pg.math.Vector2(0, -1),
+                lambda x: pg.math.Vector2(x * screen_width, screen_height + AsteroidType.LARGE.size),
+            ),
+            # Top - Y axis is inverted
+            (
+                pg.math.Vector2(0, 1),
+                lambda x: pg.math.Vector2(x * screen_width, -AsteroidType.LARGE.size),
+            ),
+        ]
+
+        self.scene.updatable.add(self)
+
+        self.spawn_timer = self._settings.asteroid_spawn_rate
+        logger.debug('Asteroid field initialised')
 
     def update(self, dt: float) -> None:
-        self._spawn_timer += dt
-        if self._spawn_timer > constants.ASTEROID_SPAWN_RATE:
-            self._spawn_timer = 0.0
-
-            spawn_point: list[Any] = random.choice(self._spawn_points)
-            velocity: Vector2 = spawn_point[0].rotate(random.randint(-30, 30))
-            position: Vector2 = spawn_point[1](random.uniform(0, 1))
+        self.spawn_timer -= dt
+        if self.spawn_timer <= 0:
+            spawn_point = random.choice(self.spawn_points)
+            velocity = spawn_point[0].rotate(random.randint(-30, 30))
+            position = spawn_point[1](random.uniform(0, 1))
             asteroid_type = random.choice(list(AsteroidType))
             self.spawn(position, asteroid_type, velocity)
+
+    def spawn(self, position: Vector2, asteroid_type: AsteroidType, velocity: Vector2) -> None:
+        asteroid = Asteroid(self.scene, position, asteroid_type)
+        asteroid.velocity = velocity
+        self.spawn_timer = self._settings.asteroid_spawn_rate

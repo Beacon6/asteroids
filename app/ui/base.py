@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
 from pygame import freetype
 from pygame.freetype import Font
 from pygame.surface import Surface
-
-from app.objects.base import ObjectBase
 
 
 class PanelBase(ABC):
@@ -20,5 +19,5 @@ class PanelBase(ABC):
         return font
 
     @abstractmethod
-    def render(self, data_source: ObjectBase | None = None) -> None:
+    def render(self, data_source: Any | None = None) -> None:
         pass
