@@ -1,13 +1,13 @@
 import logging
 import random
 from enum import Enum
+from typing import override
 
 import pygame as pg
 from pygame.math import Vector2
-from pygame.sprite import Sprite
 
+from app.objects.base import CircleBase
 from app.objects.scenes import GameScene
-from app.settings import get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -23,24 +23,20 @@ class AsteroidType(Enum):
         self.score: int = score
 
 
-class Asteroid(Sprite):
-    _settings = get_settings()
-
+class Asteroid(CircleBase):
     def __init__(self, scene: GameScene, position: Vector2, asteroid_type: AsteroidType) -> None:
-        super().__init__()
+        super().__init__(scene, position)
 
         self.scene = scene
 
-        self.position = Vector2(position)
         self.type = asteroid_type
 
-        self.scene.drawable.add(self)
-        self.scene.updatable.add(self)
         self.scene.asteroids.add(self)
 
         self.velocity: Vector2 = Vector2(0, 1)
         logger.debug(f'Asteroid initialised at {self.position}')
 
+    @override
     def draw(self) -> None:
         self.rect = pg.draw.circle(
             self.scene.screen,
@@ -50,6 +46,7 @@ class Asteroid(Sprite):
             self._settings.asteroid_line_width,
         )
 
+    @override
     def update(self, dt: float) -> None:
         self.position += self.velocity * self.type.speed * dt
 
