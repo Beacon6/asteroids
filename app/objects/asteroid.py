@@ -25,9 +25,7 @@ class AsteroidType(Enum):
 
 class Asteroid(CircleBase):
     def __init__(self, scene: GameScene, position: Vector2, asteroid_type: AsteroidType) -> None:
-        super().__init__(scene, position)
-
-        self.scene = scene
+        super().__init__(scene, position, asteroid_type.size)
 
         self.type = asteroid_type
 
@@ -42,7 +40,7 @@ class Asteroid(CircleBase):
             self.scene.screen,
             self._settings.asteroid_color,
             self.position,
-            self.type.size,
+            self.radius,
             self._settings.asteroid_line_width,
         )
 

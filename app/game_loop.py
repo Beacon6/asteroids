@@ -60,10 +60,10 @@ class GameLoop:
                 self.game_scene.asteroids,
                 True,
                 True,
+                collided=pg.sprite.collide_circle,
             )
             if missile_collisions:
                 logger.debug(missile_collisions)
-                logger.info('Asteroid destroyed!')
                 for _, val in missile_collisions.items():
                     val[0].split()
 

@@ -10,12 +10,13 @@ from app.settings import get_settings
 class CircleBase(Sprite, ABC):
     _settings = get_settings()
 
-    def __init__(self, scene: GameScene, position: Vector2) -> None:
+    def __init__(self, scene: GameScene, position: Vector2, radius: float) -> None:
         super().__init__()
 
         self.scene = scene
 
         self.position = Vector2(position)
+        self.radius = radius
 
         self.scene.drawable.add(self)
         self.scene.updatable.add(self)

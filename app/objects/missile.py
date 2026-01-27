@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 class Missile(CircleBase):
     def __init__(self, scene: GameScene, position: Vector2, rotation: float) -> None:
-        super().__init__(scene, position)
+        super().__init__(scene, position, self._settings.missile_radius)
 
         self.rotation = rotation
 
@@ -27,7 +27,7 @@ class Missile(CircleBase):
             self.scene.screen,
             self._settings.missile_color,
             self.position,
-            self._settings.missile_radius,
+            self.radius,
             self._settings.missile_line_width,
         )
 
