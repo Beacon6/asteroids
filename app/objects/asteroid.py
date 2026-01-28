@@ -31,15 +31,17 @@ class Asteroid(CircleBase):
 
         self.scene.asteroids.add(self)
 
+        self.rect = pg.Rect(0, 0, self.type.size * 2, self.type.size * 2)
+        self.rect.center = (int(position.x), int(position.y))
         self.velocity: Vector2 = Vector2(0, 1)
         logger.debug(f'Asteroid initialised at {self.position}')
 
     @override
     def draw(self) -> None:
-        self.rect = pg.draw.circle(
+        pg.draw.circle(
             self.scene.screen,
             self._settings.asteroid_color,
-            self.position,
+            self.rect.center,
             self.radius,
             self._settings.asteroid_line_width,
         )
@@ -47,6 +49,7 @@ class Asteroid(CircleBase):
     @override
     def update(self, dt: float) -> None:
         self.position += self.velocity * self.type.speed * dt
+        self.rect.center = (int(self.position.x), int(self.position.y))
 
     def split(self) -> None:
         if self.type == AsteroidType.SMALL:

@@ -37,10 +37,6 @@ class GameLoop:
 
             self.game_scene.screen.fill('black')
             self.game_scene.updatable.update(self.dt)
-            for obj in self.game_scene.drawable:
-                obj.draw()
-                if self.debug:
-                    pg.draw.rect(self.game_scene.screen, (255, 0, 0), obj.rect, 1)
 
             player_collisions = groupcollide(
                 self.game_scene.player,
@@ -66,6 +62,11 @@ class GameLoop:
                 logger.debug(missile_collisions)
                 for _, val in missile_collisions.items():
                     val[0].split()
+
+            for obj in self.game_scene.drawable:
+                obj.draw()
+                if self.debug:
+                    pg.draw.rect(self.game_scene.screen, (255, 0, 0), obj.rect, 1)
 
             pg.display.flip()
             self.dt = self.clock.tick(self._settings.target_fps)  # time since last refresh (ms)

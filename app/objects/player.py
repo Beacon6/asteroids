@@ -27,6 +27,8 @@ class Player(Sprite):
         self.scene.updatable.add(self)
         self.scene.player.add(self)
 
+        self.rect = pg.Rect(0, 0, self._settings.player_radius * 2, self._settings.player_radius * 2)
+        self.rect.center = (int(self.position.x), int(self.position.y))
         self.hp = self._settings.player_hp
         self.score = 0
         self.reload_timer = 0.0
@@ -35,13 +37,13 @@ class Player(Sprite):
     def _build_triangle(self) -> tuple[Vector2, Vector2, Vector2]:
         forward: Vector2 = Vector2(0, 1).rotate(self.rotation)
         right: Vector2 = Vector2(0, 1).rotate(self.rotation + 90) * self._settings.player_radius / 1.5
-        a: Vector2 = self.position + forward * self._settings.player_radius
-        b: Vector2 = self.position - forward * self._settings.player_radius - right
-        c: Vector2 = self.position - forward * self._settings.player_radius + right
+        a: Vector2 = self.rect.center + forward * self._settings.player_radius
+        b: Vector2 = self.rect.center - forward * self._settings.player_radius - right
+        c: Vector2 = self.rect.center - forward * self._settings.player_radius + right
         return (a, b, c)
 
     def draw(self) -> None:
-        self.rect = pg.draw.polygon(
+        pg.draw.polygon(
             self.scene.screen,
             self._settings.player_color,
             self._build_triangle(),
@@ -76,10 +78,12 @@ class Player(Sprite):
     def move(self, dt: float) -> None:
         forward: Vector2 = pg.math.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * self._settings.player_move_speed * dt
+        self.rect.center = (int(self.position.x), int(self.position.y))
 
     def strafe(self, dt: float) -> None:
         direction: Vector2 = pg.math.Vector2(0, 1).rotate(self.rotation + 90)
         self.position += direction * self._settings.player_move_speed * dt
+        self.rect.center = (int(self.position.x), int(self.position.y))
 
     def shoot(self) -> None:
         Missile(self.scene, self.position, self.rotation)

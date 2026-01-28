@@ -18,15 +18,17 @@ class Missile(CircleBase):
 
         self.scene.projectiles.add(self)
 
+        self.rect = pg.Rect(0, 0, self.radius * 2, self.radius * 2)
+        self.rect.center = (int(position.x), int(position.y))
         self.velocity = Vector2(0, 1).rotate(rotation)
         logger.debug(f'Missile initialised at {self.position}')
 
     @override
     def draw(self) -> None:
-        self.rect = pg.draw.circle(
+        pg.draw.circle(
             self.scene.screen,
             self._settings.missile_color,
-            self.position,
+            self.rect.center,
             self.radius,
             self._settings.missile_line_width,
         )
@@ -34,3 +36,4 @@ class Missile(CircleBase):
     @override
     def update(self, dt: float) -> None:
         self.position += self.velocity * self._settings.missile_speed * dt
+        self.rect.center = (int(self.position.x), int(self.position.y))
