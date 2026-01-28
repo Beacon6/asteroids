@@ -80,11 +80,22 @@ class Player(Sprite):
         self.position += forward * self._settings.player_move_speed * dt
         self.rect.center = (int(self.position.x), int(self.position.y))
 
+        if not self._is_on_screen():
+            self.rotation += 180.0
+
     def strafe(self, dt: float) -> None:
         direction: Vector2 = pg.math.Vector2(0, 1).rotate(self.rotation + 90)
         self.position += direction * self._settings.player_move_speed * dt
         self.rect.center = (int(self.position.x), int(self.position.y))
 
+        if not self._is_on_screen():
+            self.rotation += 180.0
+
     def shoot(self) -> None:
         Missile(self.scene, self.position, self.rotation)
         self.reload_timer = self._settings.player_reload_speed
+
+    def _is_on_screen(self) -> bool:
+        margin = 100
+        inflated_screen = self.scene.screen.get_rect().inflate(margin, margin)
+        return self.rect.colliderect(inflated_screen)
