@@ -51,6 +51,10 @@ class Asteroid(CircleBase):
         self.position += self.velocity * self.type.speed * dt
         self.rect.center = (int(self.position.x), int(self.position.y))
 
+        if not self._is_on_screen():
+            logger.debug('Asteroid removed')
+            self.kill()
+
     def split(self) -> None:
         if self.type == AsteroidType.SMALL:
             return
@@ -68,3 +72,8 @@ class Asteroid(CircleBase):
     def spawn_new_on_split(self, asteroid_type: AsteroidType, random_offset: float) -> None:
         new_asteroid = Asteroid(self.scene, self.position, asteroid_type)
         new_asteroid.velocity = self.velocity.rotate(random_offset)
+
+    def _is_on_screen(self) -> bool:
+        margin = 100
+        screen_inflated = self.scene.screen.get_rect().inflate(margin, margin)
+        return self.rect.colliderect(screen_inflated)

@@ -27,7 +27,6 @@ class GameLoop:
         logger.debug('Starting game loop')
         # TODO: Prevent player from going out of bounds
         player = Player(self.game_scene)
-        # TODO: Cleanup out of bounds asteroids
         AsteroidField(self.game_scene)
 
         while self.running:

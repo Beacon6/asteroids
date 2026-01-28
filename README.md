@@ -35,14 +35,3 @@ SCREEN_WIDTH=1920
 SCREEN_HEIGHT=1080
 TARGET_FPS=60
 ```
-
-## TODO
-
-- [x] Support game settings via `.env` (e.g. screen size)
-- [x] Implement asteroid splitting when hit
-- [x] Add score tracking and display
-- [x] Add player lives and a game over screen
-- [x] Fix TODOs
-- [ ] Add movement velocity
-- [ ] Add weapons overheating
-- [ ] Add power-ups (e.g. shield, rapid fire)
