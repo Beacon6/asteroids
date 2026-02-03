@@ -6,7 +6,7 @@ from pygame.sprite import Sprite
 
 from app.objects.missile import Missile
 from app.objects.scenes import GameScene
-from app.settings import get_player_initial_position, get_settings
+from core.settings import get_player_initial_position, get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,9 @@ class Player(Sprite):
         self.scene.updatable.add(self)
         self.scene.player.add(self)
 
-        self.rect = pg.Rect(0, 0, self._settings.player_radius * 2, self._settings.player_radius * 2)
+        self.rect = pg.Rect(
+            0, 0, self._settings.player_radius * 2, self._settings.player_radius * 2
+        )
         self.rect.center = (int(self.position.x), int(self.position.y))
         self.hp = self._settings.player_hp
         self.score = 0
@@ -36,7 +38,9 @@ class Player(Sprite):
 
     def _build_triangle(self) -> tuple[Vector2, Vector2, Vector2]:
         forward: Vector2 = Vector2(0, 1).rotate(self.rotation)
-        right: Vector2 = Vector2(0, 1).rotate(self.rotation + 90) * self._settings.player_radius / 1.5
+        right: Vector2 = (
+            Vector2(0, 1).rotate(self.rotation + 90) * self._settings.player_radius / 1.5
+        )
         a: Vector2 = self.rect.center + forward * self._settings.player_radius
         b: Vector2 = self.rect.center - forward * self._settings.player_radius - right
         c: Vector2 = self.rect.center - forward * self._settings.player_radius + right

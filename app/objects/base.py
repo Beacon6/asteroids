@@ -4,7 +4,7 @@ from pygame.math import Vector2
 from pygame.sprite import Sprite
 
 from app.objects.scenes import GameScene
-from app.settings import get_settings
+from core.settings import get_settings
 
 
 class CircleBase(Sprite, ABC):

@@ -8,7 +8,7 @@ from pygame.sprite import Sprite
 
 from app.objects.asteroid import Asteroid, AsteroidType
 from app.objects.scenes import GameScene
-from app.settings import get_settings
+from core.settings import get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -34,12 +34,16 @@ class AsteroidField(Sprite):
             # Right
             (
                 pg.math.Vector2(-1, 0),
-                lambda y: pg.math.Vector2(screen_width + AsteroidType.LARGE.size, y * screen_height),
+                lambda y: pg.math.Vector2(
+                    screen_width + AsteroidType.LARGE.size, y * screen_height
+                ),
             ),
             # Bottom - Y axis is inverted
             (
                 pg.math.Vector2(0, -1),
-                lambda x: pg.math.Vector2(x * screen_width, screen_height + AsteroidType.LARGE.size),
+                lambda x: pg.math.Vector2(
+                    x * screen_width, screen_height + AsteroidType.LARGE.size
+                ),
             ),
             # Top - Y axis is inverted
             (

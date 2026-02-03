@@ -31,7 +31,7 @@ Ctrl + C    Exit
 
 Display settings can be changed through an `.env` which will be loaded automatically:
 ```bash
-SCREEN_WIDTH=1920
-SCREEN_HEIGHT=1080
-TARGET_FPS=60
+AST_SCREEN_WIDTH=1920
+AST_SCREEN_HEIGHT=1080
+AST_TARGET_FPS=60
 ```
