@@ -42,6 +42,7 @@ class GameLoop:
             return
         events_map = {
             GameEvents.EXIT: self.stop,
+            GameEvents.GAME_OVER: self.stop,
         }
         for event in events:
             events_map[event]()
@@ -50,4 +51,5 @@ class GameLoop:
         self.screen.fill('black')
         self.scene.update(self.clock.dt)
         self.scene.draw(self.screen)
+        self.scene.handle_collisions()
         pg.display.flip()

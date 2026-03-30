@@ -18,6 +18,7 @@ from core import (
     ASTEROID_SMALL_RADIUS,
     ASTEROID_SMALL_SCORE,
     ASTEROID_SMALL_SPEED,
+    OBJECT_LINE_WIDTH,
 )
 from objects.base import BaseObject
 from utils import entity_is_within_viewport, position_to_int_tuple
@@ -48,19 +49,21 @@ class Asteroid(BaseObject):
         rotation: float,
         asteroid_type: AsteroidType,
     ) -> None:
-        super().__init__(*groups, scene=scene, position=pg.Vector2(position), rotation=rotation)
+        super().__init__(
+            *groups,
+            scene=scene,
+            position=pg.Vector2(position),
+            rotation=rotation,
+            radius=asteroid_type.size,
+        )
         self.type = asteroid_type
-        self.rect = pg.Rect(0, 0, asteroid_type.size * 2, asteroid_type.size * 2)
-        self.rect.center = position
-
         self.velocity = pg.Vector2(0, 1).rotate(rotation)
-        self.color = 'blue'
-        self.line_width = 2
 
         logger.debug('Asteroid initialised at %s with type %s', position, asteroid_type.name)
 
     def draw(self, screen: pg.Surface) -> None:
-        pg.draw.circle(screen, self.color, self.rect.center, self.type.size, self.line_width)
+        color = 'blue'
+        pg.draw.circle(screen, color, self.rect.center, self.radius, OBJECT_LINE_WIDTH)
 
     def update(self, dt: float) -> None:
         self.position += self.velocity * self.type.speed * dt

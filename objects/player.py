@@ -7,6 +7,7 @@ import pygame as pg
 from pygame.sprite import AbstractGroup
 
 from core import (
+    OBJECT_LINE_WIDTH,
     PLAYER_HP,
     PLAYER_MOVE_SPEED,
     PLAYER_RADIUS,
@@ -31,21 +32,21 @@ class Player(BaseObject):
         position: tuple[int, int],
         rotation: float = 180.0,
     ) -> None:
-        super().__init__(*groups, scene=scene, position=pg.Vector2(position), rotation=rotation)
-        self.radius = PLAYER_RADIUS
-        self.rect = pg.Rect(0, 0, self.radius * 2, self.radius * 2)
-        self.rect.center = position
-
+        super().__init__(
+            *groups,
+            scene=scene,
+            position=pg.Vector2(position),
+            rotation=rotation,
+            radius=PLAYER_RADIUS,
+        )
         self.hp = PLAYER_HP
-        self.score = 0
         self.reload_timer = 0.0
-        self.color = 'red'
-        self.line_width = 2
 
         logger.debug('Player intialised at %s', position)
 
     def draw(self, screen: pg.Surface) -> None:
-        pg.draw.polygon(screen, self.color, self._build_triangle(), self.line_width)
+        color = 'red'
+        pg.draw.polygon(screen, color, self._build_triangle(), OBJECT_LINE_WIDTH)
 
     def update(self, dt: float) -> None:
         self.reload_timer -= dt
@@ -94,6 +95,11 @@ class Player(BaseObject):
             rotation=self.rotation,
         )
         self.reload_timer = PLAYER_RELOAD_SPEED
+
+    # TODO: add invincibility frames after taking damage
+    def take_damage(self) -> None:
+        self.hp -= 1
+        logger.debug('Player takes damage, HP is now %s', self.hp)
 
     def _build_triangle(self) -> tuple[pg.Vector2, pg.Vector2, pg.Vector2]:
         forward = pg.Vector2(0, 1).rotate(self.rotation)

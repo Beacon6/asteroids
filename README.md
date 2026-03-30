@@ -24,7 +24,7 @@ python main.py
 ← / →       Turn left / right
 Q / E       Strafe left / right
 Space       Shoot
-Ctrl + C    Exit
+Esc         Exit
 ```
 
 ## Settings

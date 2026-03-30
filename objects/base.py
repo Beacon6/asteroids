@@ -7,6 +7,7 @@ import pygame as pg
 from pygame.sprite import AbstractGroup, Sprite
 
 from core import get_settings
+from utils import position_to_int_tuple
 
 if TYPE_CHECKING:
     from scenes import GameScene
@@ -36,9 +37,13 @@ class BaseObject(SpriteWrapper, ABC):
         scene: GameScene,
         position: pg.Vector2,
         rotation: float,
+        radius: int,
     ) -> None:
         super().__init__(*groups)
         self._settings = get_settings()
         self.scene = scene
         self.position = position
         self.rotation = rotation
+        self.radius = radius
+        self.rect = pg.Rect(0, 0, radius * 2, radius * 2)
+        self.rect.center = position_to_int_tuple(position)

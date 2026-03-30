@@ -5,10 +5,10 @@ from objects.missile import Missile
 from objects.player import Player
 
 __all__ = [
-    'SpriteWrapper',
-    'Player',
-    'Missile',
     'Asteroid',
-    'AsteroidType',
     'AsteroidField',
+    'AsteroidType',
+    'Missile',
+    'Player',
+    'SpriteWrapper',
 ]
