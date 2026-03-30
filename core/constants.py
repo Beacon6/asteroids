@@ -5,8 +5,9 @@ CAPTION = 'Asteroids'
 PLAYER_RADIUS: int = 20
 PLAYER_MOVE_SPEED: float = 0.2
 PLAYER_ROTATION_SPEED: float = 0.2
-PLAYER_RELOAD_SPEED: float = 300.0  # milliseconds
-PLAYER_HP: int = 3
+PLAYER_RELOAD_SPEED: float = 500.0  # milliseconds
+PLAYER_HP: int = 5
+PLAYER_INVINCIBILITY_DURATION: float = 3000.0  # milliseconds
 
 # Missile
 MISSILE_RADIUS: int = 5

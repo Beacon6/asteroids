@@ -80,7 +80,7 @@ class GameScene(BaseScene):
 
     def _handle_player_collisions(self) -> None:
         player = self.player.sprite
-        if not player:
+        if not player or player.invincibility_timer > 0:
             return
         hits: PlayerHits = pg.sprite.spritecollide(
             player, self.asteroids, True, collided=pg.sprite.collide_circle

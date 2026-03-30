@@ -9,6 +9,7 @@ from pygame.sprite import AbstractGroup
 from core import (
     OBJECT_LINE_WIDTH,
     PLAYER_HP,
+    PLAYER_INVINCIBILITY_DURATION,
     PLAYER_MOVE_SPEED,
     PLAYER_RADIUS,
     PLAYER_RELOAD_SPEED,
@@ -41,15 +42,17 @@ class Player(BaseObject):
         )
         self.hp = PLAYER_HP
         self.reload_timer = 0.0
+        self.invincibility_timer = 0.0
 
         logger.debug('Player intialised at %s', position)
 
     def draw(self, screen: pg.Surface) -> None:
-        color = 'red'
+        color = 'red' if self.invincibility_timer <= 0 else 'yellow'
         pg.draw.polygon(screen, color, self._build_triangle(), OBJECT_LINE_WIDTH)
 
     def update(self, dt: float) -> None:
         self.reload_timer -= dt
+        self.invincibility_timer -= dt
         key_inputs = pg.key.get_pressed()
 
         # TODO: extract input handling
@@ -68,7 +71,7 @@ class Player(BaseObject):
         if key_inputs[pg.K_q]:
             self.move(-dt, strafe=True)
 
-        if key_inputs[pg.K_SPACE] and self.reload_timer <= 0:
+        if (key_inputs[pg.K_SPACE] or key_inputs[pg.K_w]) and self.reload_timer <= 0:
             logger.debug('Player shoots a missile with reload timer %s', self.reload_timer)
             self.shoot()
 
@@ -96,9 +99,9 @@ class Player(BaseObject):
         )
         self.reload_timer = PLAYER_RELOAD_SPEED
 
-    # TODO: add invincibility frames after taking damage
     def take_damage(self) -> None:
         self.hp -= 1
+        self.invincibility_timer = PLAYER_INVINCIBILITY_DURATION
         logger.debug('Player takes damage, HP is now %s', self.hp)
 
     def _build_triangle(self) -> tuple[pg.Vector2, pg.Vector2, pg.Vector2]:
