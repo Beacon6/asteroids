@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pygame as pg
 from pygame.sprite import AbstractGroup
@@ -13,8 +15,10 @@ from core import (
 )
 from objects.base import BaseObject
 from objects.missile import Missile
-from scenes import GameScene
 from utils import entity_is_within_viewport, position_to_int_tuple
+
+if TYPE_CHECKING:
+    from scenes import GameScene
 
 logger = logging.getLogger(__name__)
 

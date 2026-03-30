@@ -1,6 +1,11 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pygame as pg
 
-from objects.base import SpriteWrapper
+if TYPE_CHECKING:
+    from objects import SpriteWrapper
 
 
 def debug_draw_rect(entity: SpriteWrapper, screen: pg.Surface) -> None:

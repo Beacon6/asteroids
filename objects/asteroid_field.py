@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import logging
 import random
 from collections.abc import Callable
-from typing import Any, override
+from typing import TYPE_CHECKING, Any, override
 
 import pygame as pg
 from pygame.sprite import AbstractGroup
@@ -9,8 +11,10 @@ from pygame.sprite import AbstractGroup
 from core import ASTEROID_LARGE_RADIUS, ASTEROID_SPAWN_RATE
 from objects.asteroid import Asteroid, AsteroidType
 from objects.base import SpriteWrapper
-from scenes import GameScene
 from utils import position_to_int_tuple
+
+if TYPE_CHECKING:
+    from scenes import GameScene
 
 logger = logging.getLogger(__name__)
 

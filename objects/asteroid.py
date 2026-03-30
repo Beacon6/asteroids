@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import logging
 import random
 from enum import Enum
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pygame as pg
 from pygame.sprite import AbstractGroup
@@ -18,8 +20,10 @@ from core import (
     ASTEROID_SMALL_SPEED,
 )
 from objects.base import BaseObject
-from scenes import GameScene
 from utils import entity_is_within_viewport, position_to_int_tuple
+
+if TYPE_CHECKING:
+    from scenes import GameScene
 
 logger = logging.getLogger(__name__)
 

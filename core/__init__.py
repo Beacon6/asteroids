@@ -19,11 +19,10 @@ from core.constants import (
     PLAYER_RELOAD_SPEED,
     PLAYER_ROTATION_SPEED,
 )
-from core.settings import Settings, get_settings
+from core.settings import get_settings
 
 __all__ = [
     'GameClock',
-    'Settings',
     'get_settings',
     'CAPTION',
     'PLAYER_RADIUS',
