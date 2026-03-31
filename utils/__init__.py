@@ -4,8 +4,14 @@ from typing import TYPE_CHECKING
 
 import pygame as pg
 
+from utils.input_handler import InputHandler
+
 if TYPE_CHECKING:
     from objects import SpriteWrapper
+
+__all__ = [
+    'InputHandler',
+]
 
 
 def debug_draw_rect(entity: SpriteWrapper, screen: pg.Surface) -> None:

@@ -17,7 +17,7 @@ from core import (
 )
 from objects.base import BaseObject
 from objects.missile import Missile
-from utils import entity_is_within_viewport, position_to_int_tuple
+from utils import InputHandler, entity_is_within_viewport, position_to_int_tuple
 
 if TYPE_CHECKING:
     from scenes import GameScene
@@ -53,27 +53,7 @@ class Player(BaseObject):
     def update(self, dt: float) -> None:
         self.reload_timer -= dt
         self.invincibility_timer -= dt
-        key_inputs = pg.key.get_pressed()
-
-        # TODO: extract input handling
-        if key_inputs[pg.K_LEFT]:
-            self.rotate(-dt)
-        if key_inputs[pg.K_RIGHT]:
-            self.rotate(dt)
-
-        if key_inputs[pg.K_UP]:
-            self.move(dt)
-        if key_inputs[pg.K_DOWN]:
-            self.move(-dt)
-
-        if key_inputs[pg.K_e]:
-            self.move(dt, strafe=True)
-        if key_inputs[pg.K_q]:
-            self.move(-dt, strafe=True)
-
-        if (key_inputs[pg.K_SPACE] or key_inputs[pg.K_w]) and self.reload_timer <= 0:
-            logger.debug('Player shoots a missile with reload timer %s', self.reload_timer)
-            self.shoot()
+        InputHandler.handle_input(self, dt)
 
     def move(self, dt: float, strafe: bool = False) -> None:
         rotation = self.rotation + 90.0 if strafe else self.rotation
