@@ -8,15 +8,12 @@ import pygame as pg
 from pygame.sprite import Group, GroupSingle
 
 from scenes.base import BaseScene
-from utils import debug_draw_rect, load_highscore, save_highscore
+from utils import CollisionHandler, debug_draw_rect
 
 if TYPE_CHECKING:
     from objects import Asteroid, Missile, Player, SpriteWrapper
 
 logger = logging.getLogger(__name__)
-
-type MissileHits = dict[Missile, list[Asteroid]]
-type PlayerHits = list[Asteroid]
 
 
 class GameEvents(IntEnum):
@@ -65,31 +62,12 @@ class GameScene(BaseScene):
         self._handle_missile_collisions()
         self._handle_player_collisions()
 
-    # TODO: Extract to a separate collision handler class
     def _handle_missile_collisions(self) -> None:
-        hits: MissileHits = pg.sprite.groupcollide(
-            self.projectiles,
-            self.asteroids,
-            True,
-            True,
-            collided=pg.sprite.collide_circle,
-        )
-        for asteroids_hit in hits.values():
-            for asteroid in asteroids_hit:
-                asteroid.split()
-                self.score += asteroid.type.score
+        score_delta = CollisionHandler.handle_missile_collisions(self.projectiles, self.asteroids)
+        self.score += score_delta
 
-    # TODO: Extract to a separate collision handler class
     def _handle_player_collisions(self) -> None:
-        player = self.player.sprite
-        if not player or player.invincibility_timer > 0:
-            return
-        hits: PlayerHits = pg.sprite.spritecollide(
-            player, self.asteroids, True, collided=pg.sprite.collide_circle
-        )
-        for asteroid in hits:
-            asteroid.split()
-            player.take_damage()
+        CollisionHandler.handle_player_collisions(self.player.sprite, self.asteroids)
 
     def _handle_game_over(self) -> bool:
         player = self.player.sprite
@@ -97,11 +75,4 @@ class GameScene(BaseScene):
         if is_game_over:
             logger.info('Player has been destroyed')
             player.kill()
-            self._handle_highscore()
         return is_game_over
-
-    # TODO: Extract to a separate score handler class
-    def _handle_highscore(self) -> None:
-        if self.score > load_highscore():
-            save_highscore(self.score)
-            logger.info(f'New highscore: {self.score}')

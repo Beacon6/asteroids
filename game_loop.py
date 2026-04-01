@@ -5,6 +5,7 @@ import pygame as pg
 from core import GameClock, get_settings
 from objects import AsteroidField, Player
 from scenes import GameEvents, GameScene
+from utils import ScoreHandler
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +36,7 @@ class GameLoop:
 
     def stop(self) -> None:
         logger.info('Stopping GameLoop')
+        ScoreHandler.handle_highscore(self.scene.score)
         self.running = False
 
     def _handle_events(self, events: set[GameEvents] | None) -> None:
