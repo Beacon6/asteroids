@@ -21,7 +21,7 @@ from core.constants import (
     PLAYER_RELOAD_SPEED,
     PLAYER_ROTATION_SPEED,
 )
-from core.settings import get_settings
+from core.settings import BASE_DIR, get_settings
 
 __all__ = [
     'ASTEROID_LARGE_RADIUS',
@@ -34,6 +34,7 @@ __all__ = [
     'ASTEROID_SMALL_SCORE',
     'ASTEROID_SMALL_SPEED',
     'ASTEROID_SPAWN_RATE',
+    'BASE_DIR',
     'CAPTION',
     'MISSILE_RADIUS',
     'MISSILE_SPEED',
