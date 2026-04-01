@@ -57,9 +57,8 @@ class Player(BaseObject):
 
     def move(self, dt: float, strafe: bool = False) -> None:
         rotation = self.rotation + 90.0 if strafe else self.rotation
-        # NOTE: direction == velocity ???
-        direction = pg.Vector2(0, 1).rotate(rotation)
-        self.position += direction * PLAYER_MOVE_SPEED * dt
+        velocity = pg.Vector2(0, 1).rotate(rotation)
+        self.position += velocity * PLAYER_MOVE_SPEED * dt
         self.rect.center = position_to_int_tuple(self.position)
 
         if not entity_is_within_viewport(self, self.scene.viewport):
