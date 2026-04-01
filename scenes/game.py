@@ -8,7 +8,7 @@ import pygame as pg
 from pygame.sprite import Group, GroupSingle
 
 from scenes.base import BaseScene
-from utils import debug_draw_rect
+from utils import debug_draw_rect, load_highscore, save_highscore
 
 if TYPE_CHECKING:
     from objects import Asteroid, Missile, Player, SpriteWrapper
@@ -65,6 +65,7 @@ class GameScene(BaseScene):
         self._handle_missile_collisions()
         self._handle_player_collisions()
 
+    # TODO: Extract to a separate collision handler class
     def _handle_missile_collisions(self) -> None:
         hits: MissileHits = pg.sprite.groupcollide(
             self.projectiles,
@@ -78,6 +79,7 @@ class GameScene(BaseScene):
                 asteroid.split()
                 self.score += asteroid.type.score
 
+    # TODO: Extract to a separate collision handler class
     def _handle_player_collisions(self) -> None:
         player = self.player.sprite
         if not player or player.invincibility_timer > 0:
@@ -95,4 +97,11 @@ class GameScene(BaseScene):
         if is_game_over:
             logger.info('Player has been destroyed')
             player.kill()
+            self._handle_highscore()
         return is_game_over
+
+    # TODO: Extract to a separate score handler class
+    def _handle_highscore(self) -> None:
+        if self.score > load_highscore():
+            save_highscore(self.score)
+            logger.info(f'New highscore: {self.score}')
