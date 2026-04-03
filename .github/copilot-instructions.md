@@ -8,9 +8,24 @@ uv run main.py --debug      # Run with debug mode (shows hitboxes)
 uv run ruff check .         # Lint
 uv run ruff format .        # Format
 uv run mypy .               # Type check (strict mode)
+uv run pytest               # Run tests
 ```
 
-There is no test suite. Pre-commit hooks run ruff check and ruff format automatically on commit.
+Pre-commit hooks run ruff check and ruff format automatically on commit.
+
+## Tests
+
+Tests live in `tests/` and use **pytest** + **pytest-mock**. Run with `uv run pytest`.
+
+**`tests/conftest.py`** provides three shared fixtures:
+- `pygame_init` (session-scoped, autouse): initialises pygame headlessly via `SDL_VIDEODRIVER=dummy`.
+- `settings_reset` (function-scoped, autouse): sets `sys.argv = ['main.py']` and clears the `get_settings()` LRU cache before/after every test. This prevents `.env` values and cached state from leaking between tests.
+- `mock_scene`: a `MagicMock` with real `pg.sprite.Group` instances for `drawable`, `updatable`, `asteroids`, and `projectiles`, plus a `viewport = Rect(0, 0, 800, 600)`.
+
+**Key conventions for new tests:**
+- Use `Settings(_env_file=None)` when testing pydantic-settings defaults — a local `.env` file with non-default values exists.
+- Use `defaultdict(bool)` (not a fixed-size list) when mocking `pg.key.get_pressed()` — SDL2 key constants exceed 512.
+- Game object constructors (`Asteroid`, `Missile`, `Player`) accept `*groups` positional args; omit them in unit tests when group membership is irrelevant.
 
 ## Architecture
 

@@ -14,3 +14,6 @@ wheels/
 
 # Game files
 highscore.json
+
+# Test coverage reports
+.coverage*
