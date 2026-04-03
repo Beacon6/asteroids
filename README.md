@@ -1,5 +1,7 @@
 # Asteroids
 
+[![Unit Tests](https://github.com/Beacon6/asteroids/actions/workflows/unit-tests.yml/badge.svg)](https://github.com/Beacon6/asteroids/actions/workflows/unit-tests.yml)
+
 A simple Asteroids-style game written in Python. Built with Pygame.
 
 ## Running the game
